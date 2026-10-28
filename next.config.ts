@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Guides are read from data/ at runtime, so ship those files with every server route.
+  outputFileTracingIncludes: { "/**": ["./data/guides/**", "./data/verification/**"] },
   turbopack: {
     rules: {
       "*.css": {
