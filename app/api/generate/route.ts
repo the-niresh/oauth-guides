@@ -1,8 +1,11 @@
 import { runAgent, type AgentEvent } from "@/lib/agent";
-import { getGuide, saveGenerated } from "@/lib/store";
+import { identifyApp } from "@/lib/identify";
+import { getGuide, getGuideByToolkit, saveGenerated } from "@/lib/store";
 import { slugify } from "@/lib/schema";
 
 export const maxDuration = 300;
+
+type Event = AgentEvent | { type: "saved"; slug: string } | { type: "rejected"; message: string };
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { app?: unknown; code?: unknown; fresh?: unknown };
@@ -23,9 +26,24 @@ export async function POST(req: Request) {
   const enc = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
-      const send = (e: AgentEvent | { type: "saved"; slug: string }) => controller.enqueue(enc.encode(JSON.stringify(e) + "\n"));
+      const send = (e: Event) => controller.enqueue(enc.encode(JSON.stringify(e) + "\n"));
       try {
-        const guide = await runAgent(app, send);
+        send({ type: "step", text: `Checking that "${app}" is a real app with OAuth` });
+        const id = await identifyApp(app);
+        if (!id.ok) {
+          send({ type: "rejected", message: id.message });
+          return;
+        }
+        send({ type: "step", text: id.source === "composio" ? `Found ${id.name} in Composio's toolkit list` : `Found ${id.name}, and it offers OAuth` });
+
+        // "zoom.us" and "Zoom", or "Twitter" and "X", are the same app: reuse the saved guide.
+        const known = (id.composioSlug ? await getGuideByToolkit(id.composioSlug) : null) ?? (await getGuide(slugify(id.name)));
+        if (known && (known.inLibrary || body.fresh !== true)) {
+          send({ type: "saved", slug: known.guide.slug });
+          return;
+        }
+        send({ type: "step", text: "Starting the research. This takes one to three minutes" });
+        const guide = await runAgent(id.name, send);
         await saveGenerated(guide);
         send({ type: "saved", slug: guide.slug });
       } catch (err) {

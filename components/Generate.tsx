@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Line = { text: string; kind: "step" | "error" };
+type Line = { text: string; kind: "step" | "error" | "rejected" };
 
 export function Generate({ needsCode }: { needsCode: boolean }) {
   const router = useRouter();
@@ -34,7 +34,8 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
     setFound(null);
     setElapsed(0);
     setBusy(true);
-    setLines([{ text: `Starting research on ${app.trim()}. This takes one to three minutes.`, kind: "step" }]);
+    // Nothing is printed until the server answers, so a refused code never looks like a started run.
+    setLines([]);
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
@@ -68,6 +69,7 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           const ev = JSON.parse(p) as { type: string; text?: string; message?: string; slug?: string };
           if (ev.type === "step") setLines((l) => [...l, { text: ev.text!, kind: "step" }]);
           if (ev.type === "error") setLines((l) => [...l, { text: ev.message!, kind: "error" }]);
+          if (ev.type === "rejected") setLines((l) => [...l, { text: `${ev.message} No guide was made, and no research run was paid for.`, kind: "rejected" }]);
           if (ev.type === "saved") router.push(`/guides/${ev.slug}`);
         }
       }
@@ -124,8 +126,8 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
       {lines.length > 0 && (
         <ol ref={logRef} className="mt-4 max-h-80 space-y-1 overflow-y-auto font-mono text-xs" aria-live="polite">
           {lines.map((l, i) => (
-            <li key={i} className={l.kind === "error" ? "text-[var(--hard)]" : "text-muted"}>
-              <span className="select-none">{l.kind === "error" ? "!  " : "›  "}</span>
+            <li key={i} className={l.kind === "error" ? "text-[var(--hard)]" : l.kind === "rejected" ? "rounded border border-source/40 bg-source/5 p-2 font-sans text-sm text-ink" : "text-muted"}>
+              <span className="select-none">{l.kind === "error" ? "!  " : l.kind === "rejected" ? "" : "›  "}</span>
               <span className="break-all">{l.text}</span>
             </li>
           ))}

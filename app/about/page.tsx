@@ -138,7 +138,7 @@ export default async function About() {
           </p>
           <ol className="grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
             {[
-              ["Code", "Looks the app up in Composio's managed-auth list", "always the same answer"],
+              ["Code", "Finds the app in Composio's list, or runs a small search to confirm it is real and offers OAuth. Made-up names stop here", "no guide, no full run"],
               ["Agent", "Searches and reads provider docs, decides what to open next, fills a strict guide format", "up to 25 searches"],
               ["Code", "Opens every cited page and looks for each quoted sentence; dead links become unsure", "the gate"],
               ["Person", "Reads the guide against the docs, corrects it, does the setup by hand", "library guides only"],

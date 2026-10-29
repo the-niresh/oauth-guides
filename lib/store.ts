@@ -59,3 +59,12 @@ export async function getVerification(slug: string): Promise<Verification | null
   if (!SAFE_SLUG.test(slug)) return null;
   return readJson<Verification>(path.join(VERIFY, `${slug}.json`));
 }
+
+// Finds a saved guide for the same Composio toolkit, so "Twitter" opens the X guide.
+// Library guides win over live ones.
+export async function getGuideByToolkit(composioSlug: string): Promise<{ guide: Guide; inLibrary: boolean } | null> {
+  const lib = (await libraryGuides()).find((g) => g.composio.slug === composioSlug);
+  if (lib) return { guide: lib, inLibrary: true };
+  const gen = (await generatedGuides()).find((g) => g.composio.slug === composioSlug);
+  return gen ? { guide: gen, inLibrary: false } : null;
+}

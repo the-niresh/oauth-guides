@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import { parseComposioList } from "../lib/composio";
 import { level } from "../lib/evidence";
 import { slugify, type Guide } from "../lib/schema";
+import { looksLikeAName } from "../lib/identify";
 
 test("reads managed and bring-your-own sections of Composio's list", () => {
   const md = [
@@ -29,4 +30,11 @@ test("slugify takes names and websites", () => {
   expect(slugify("https://www.zoom.us")).toBe("zoom-us");
   expect(slugify("notion.so")).toBe("notion-so");
   expect(slugify("x.com")).toBe("x");
+});
+
+test("rejects input that cannot be an app name (Composio names like X are checked first)", () => {
+  expect(looksLikeAName("!!!")).toBe(false);
+  expect(looksLikeAName("1")).toBe(false);
+  expect(looksLikeAName("x.com")).toBe(true);
+  expect(looksLikeAName("Notion")).toBe(true);
 });
