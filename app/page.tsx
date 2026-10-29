@@ -42,8 +42,8 @@ export default async function Home() {
         </p>
       </section>
 
-      <section className="mt-10" aria-labelledby="research">
-        <h2 id="research" className="mb-3 font-mono text-sm uppercase tracking-wide text-muted">Look up any app, researched live by an agent</h2>
+      <section className="mt-10 scroll-mt-24" id="research-box" aria-labelledby="research">
+        <h2 id="research" className="mb-3 scroll-mt-24 font-mono text-sm uppercase tracking-wide text-muted">Look up any app, researched live by an agent</h2>
         <Generate needsCode={Boolean(process.env.ACCESS_CODE)} guides={[...lib, ...live].map((g) => ({ slug: g.slug, app: g.app }))} />
       </section>
 

@@ -15,7 +15,7 @@ export function Toc({ items }: { items: [string, string][] }) {
       let current = items[0][0];
       for (const [id] of items) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 140) current = id;
+        if (el && el.getBoundingClientRect().top <= 160) current = id;
       }
       setActive(current);
     };
@@ -26,7 +26,7 @@ export function Toc({ items }: { items: [string, string][] }) {
   }, [items]);
 
   return (
-    <ol className="sticky top-8 space-y-0.5 font-mono text-xs">
+    <ol className="sticky top-24 space-y-0.5 font-mono text-xs">
       {items.map(([id, label], i) => (
         <li key={id}>
           <a

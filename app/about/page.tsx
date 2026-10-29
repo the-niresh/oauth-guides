@@ -15,7 +15,7 @@ const REPO = "https://github.com/the-niresh/oauth-guides";
 
 function H2({ id, n, children }: { id: string; n: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="scroll-mt-8 font-serif text-4xl">
+    <h2 id={id} className="scroll-mt-24 font-serif text-4xl">
       <span className="mr-3 font-mono text-sm text-muted">{n}</span>
       {children}
     </h2>
