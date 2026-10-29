@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 type Line = { text: string; kind: "step" | "error" | "rejected" };
 
-export function Generate({ needsCode }: { needsCode: boolean }) {
+export function Generate({ needsCode, guides = [] }: { needsCode: boolean; guides?: { slug: string; app: string }[] }) {
   const router = useRouter();
   const [app, setApp] = useState("");
   const [code, setCode] = useState("");
@@ -81,8 +81,8 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
   }
 
   return (
-    <div className="rounded-xl border border-ink/80 bg-card p-5 shadow-[4px_4px_0_var(--ink)]">
-      <form onSubmit={run} className="flex flex-col gap-3">
+    <div className="rounded-xl border border-ink/80 bg-card p-5 shadow-[4px_4px_0_var(--ink)] sm:p-6">
+      <form onSubmit={run} className="grid gap-3 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto]">
         <label className="sr-only" htmlFor="app">App name or website</label>
         <input
           id="app"
@@ -90,22 +90,21 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           onChange={(e) => setApp(e.target.value)}
           placeholder="Any app, e.g. Notion or zoom.us"
           maxLength={100}
-          className="w-full rounded-md border border-line bg-paper px-4 py-3 text-lg outline-none focus:border-ink"
+          className="w-full rounded-md border border-line bg-paper px-4 py-3.5 text-lg outline-none focus:border-ink"
         />
-        <div className="flex flex-col gap-3 sm:flex-row">
         {needsCode && (
           <input
             aria-label="Access code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Access code"
-            className="min-w-0 flex-1 rounded-md border border-line bg-paper px-4 py-3 outline-none focus:border-ink"
+            className="w-full min-w-0 rounded-md border border-line bg-paper px-4 py-3.5 text-lg outline-none focus:border-ink"
           />
         )}
         <button
           disabled={busy || !app.trim()}
           aria-busy={busy}
-          className={`inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-ink px-6 py-3 text-paper ${needsCode ? "" : "sm:flex-1"} transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 ${busy ? "cursor-wait" : "disabled:opacity-40"}`}
+          className={`inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-ink px-7 py-3.5 text-lg text-paper ${needsCode ? "" : "md:col-span-2"} transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 ${busy ? "cursor-wait" : "disabled:opacity-40"}`}
         >
           {busy && (
             <svg className="size-4 animate-spin motion-reduce:animate-none" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -115,8 +114,24 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           )}
           {busy ? "Researching..." : "Make a guide"}
         </button>
-        </div>
       </form>
+      <div className="mt-4 flex flex-col gap-3 text-sm md:flex-row md:items-center md:justify-between">
+        {guides.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-muted">Open a guide, no code needed:</span>
+            {guides.map((g) => (
+              <a key={g.slug} href={`/guides/${g.slug}`} className="inline-flex min-h-9 items-center rounded-full border border-line bg-paper px-3 no-underline transition hover:border-ink">
+                {g.app}
+              </a>
+            ))}
+          </div>
+        )}
+        {needsCode && (
+          <p className="text-muted md:max-w-sm md:text-right">
+            A new guide runs a paid AI agent, so it needs the access code sent with the submission.
+          </p>
+        )}
+      </div>
       {found && (
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
           <a href={`/guides/${found}`} className="rounded-md border border-ink px-3 py-1.5 underline-offset-2 hover:underline">Open the saved guide</a>

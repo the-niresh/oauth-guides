@@ -32,7 +32,7 @@ export function TimeChart({ guides }: { guides: Guide[] }) {
     <div>
       <div className="relative ml-0 h-5 sm:mr-56 sm:ml-40">
         {TICKS.map((t) => (
-          <span key={t.label} className="absolute -translate-x-1/2 font-mono text-[10px] text-muted" style={{ left: `${pos(t.min)}%` }}>
+          <span key={t.label} className="absolute -translate-x-1/2 font-mono text-xs text-muted" style={{ left: `${pos(t.min)}%` }}>
             {t.label}
           </span>
         ))}
@@ -49,7 +49,7 @@ export function TimeChart({ guides }: { guides: Guide[] }) {
               <Link href={`/guides/${g.slug}`} className="grid gap-1 py-3 no-underline sm:grid-cols-[10rem_minmax(0,1fr)_14rem] sm:items-center">
                 <span className="flex items-baseline gap-2">
                   <span className="font-medium group-hover:underline">{g.app}</span>
-                  <span className="font-mono text-[10px] uppercase tracking-wide" style={{ color }}>{g.difficulty}</span>
+                  <span className="font-mono text-xs uppercase tracking-wide" style={{ color }}>{g.difficulty}</span>
                 </span>
                 <span className="relative block h-7" aria-label={`${g.app}: first test login in ${setup ?? "unknown"} minutes, real users ${waitLabel(wait)}`}>
                   {TICKS.map((t) => (
@@ -72,7 +72,7 @@ export function TimeChart({ guides }: { guides: Guide[] }) {
                     <span className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-card" style={{ left: `${pos(end)}%`, background: color }} />
                   )}
                 </span>
-                <span className="font-mono text-[11px] text-muted sm:pl-4">
+                <span className="font-mono text-sm text-muted sm:pl-4">
                   <span className="text-ink">{end === null ? "real users: wait unknown" : `real users: ${waitLabel(wait)}`}</span>
                   {tl?.optionalPath ? <span className="block">{tl.optionalPath.label.toLowerCase()}: about {Math.round(tl.optionalPath.days / 7)} weeks</span> : null}
                 </span>
@@ -81,7 +81,7 @@ export function TimeChart({ guides }: { guides: Guide[] }) {
           );
         })}
       </ul>
-      <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] text-muted">
+      <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-mono text-sm text-muted">
         <span><span className="mr-1.5 inline-block h-2 w-5 rounded-full bg-ink align-middle" />setup to first test login</span>
         <span><span className="mr-1.5 inline-block h-2 w-5 rounded-full bg-[var(--hard)] align-middle opacity-80" />waiting before real users can connect</span>
         <span><span className="mr-1.5 inline-block h-2 w-5 rounded-full border border-dashed border-muted align-middle" />optional longer path</span>

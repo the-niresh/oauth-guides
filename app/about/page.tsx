@@ -27,7 +27,7 @@ function Insight({ title, children, source }: { title: string; children: React.R
     <li className="border-t border-line py-5 first:border-t-0">
       <h3 className="text-lg font-medium">{title}</h3>
       <p className="mt-1 text-muted">{children}</p>
-      {source && <a href={source} target="_blank" rel="noreferrer" className="mt-1 inline-block break-all font-mono text-[11px] underline">{source}</a>}
+      {source && <a href={source} target="_blank" rel="noreferrer" className="mt-1 inline-block break-all font-mono text-xs underline">{source}</a>}
     </li>
   );
 }
@@ -144,9 +144,9 @@ export default async function About() {
               ["Person", "Reads the guide against the docs, corrects it, does the setup by hand", "library guides only"],
             ].map(([who, what, note], i) => (
               <li key={i} className={`p-4 ${who === "Agent" ? "bg-ink text-paper" : "bg-card"}`}>
-                <div className="font-mono text-[11px] uppercase tracking-wide opacity-70">{i + 1} · {who}</div>
+                <div className="font-mono text-xs uppercase tracking-wide opacity-70">{i + 1} · {who}</div>
                 <p className="mt-2 text-sm">{what}</p>
-                <p className="mt-2 font-mono text-[11px] opacity-60">{note}</p>
+                <p className="mt-2 font-mono text-xs opacity-60">{note}</p>
               </li>
             ))}
           </ol>
@@ -163,7 +163,7 @@ export default async function About() {
           <p>I read every library guide against the providers&apos; docs. The first run had the same kinds of mistakes across several apps:</p>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[520px] text-left text-sm">
-              <thead className="font-mono text-[11px] uppercase tracking-wide text-muted">
+              <thead className="font-mono text-xs uppercase tracking-wide text-muted">
                 <tr><th className="py-2 pr-3">Run 1 said</th><th className="py-2 pr-3">Actually</th><th className="py-2">Fixed by</th></tr>
               </thead>
               <tbody>
@@ -202,7 +202,7 @@ export default async function About() {
           <p>If I owned this, three numbers would tell me if it is working. The ones I can measure today are live:</p>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              ["Supply", [`${stats.library} checked guides, ${stats.live} made live`, cc ? `of ${cc.managed + cc.bringYourOwn} OAuth toolkits on Composio` : "", "Would add: requested apps still waiting"]],
+              ["Supply", [`${stats.library} library guides, ${stats.live} made live`, cc ? `of ${cc.managed + cc.bringYourOwn} OAuth toolkits on Composio` : "", "Would add: requested apps still waiting"]],
               ["Health", [`${stats.checkedShare}% of claims quote checked`, `${stats.corrections} corrections, ${stats.tested} hand tests`, "Would add: guides not rechecked in 30 days"]],
               ["Cost and speed", [stats.avgSeconds ? `${stats.avgSeconds} s and ${stats.avgSearches} searches per live guide` : "not measured yet", stats.avgInputTokens ? `${stats.avgInputTokens.toLocaleString("en")} input tokens per run` : "", "Would add: cost per guide in dollars"]],
             ].map(([title, lines]) => (

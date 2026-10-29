@@ -50,7 +50,7 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
       <div className="mt-4 grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
-            OAuth app setup · {inLibrary ? "library guide, checked by a person" : <span className="text-source">made live by the agent, not read by a person</span>}
+            OAuth app setup · {inLibrary ? "library guide, read and corrected by a person" : <span className="text-source">made live by the agent, not yet read by a person</span>}
           </p>
           <h1 className="mt-3 font-serif text-6xl leading-none">{g.app}</h1>
           <p className="mt-4 text-lg">{g.summary}</p>
@@ -71,18 +71,18 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
           {[["First test login", g.timeToFirstLogin], ["Any user can connect", g.timeToProduction]].map(([label, f]) => (
             <div key={label as string} className="mt-4 border-t border-line pt-3">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-wide text-muted">{label as string}</span>
+                <span className="font-mono text-xs uppercase tracking-wide text-muted">{label as string}</span>
                 <EvidenceBadge level={level(g, f as FactT)} />
               </div>
               <div className="mt-1 text-lg leading-snug">{(f as FactT).text}</div>
             </div>
           ))}
           <div className="mt-4 border-t border-line pt-3">
-            <div className="font-mono text-[11px] uppercase tracking-wide text-muted">On Composio</div>
+            <div className="font-mono text-xs uppercase tracking-wide text-muted">On Composio</div>
             <div className="mt-1"><ComposioPill status={g.composio.status} slug={g.composio.slug} /></div>
           </div>
           <div className="mt-4 border-t border-line pt-3">
-            <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wide text-muted">
+            <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wide text-muted">
               <span>Evidence</span><span>{c.checked + c["source-only"] + c.unsure} claims</span>
             </div>
             <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-line">
@@ -90,7 +90,7 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
               <div className="bg-source" style={{ flexGrow: c["source-only"] }} />
               <div className="bg-unsure/50" style={{ flexGrow: c.unsure }} />
             </div>
-            <div className="mt-1.5 flex flex-wrap gap-x-3 font-mono text-[11px]">
+            <div className="mt-1.5 flex flex-wrap gap-x-3 font-mono text-xs">
               <span className="text-checked">{c.checked} checked</span>
               <span className="text-source">{c["source-only"]} source only</span>
               <span className="text-unsure">{c.unsure} unsure</span>
@@ -101,11 +101,11 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
         </aside>
       </div>
 
-      <p className="mt-6 text-xs text-muted">
+      <p className="mt-6 text-sm text-muted">
         {g.sourceChecks.some((s) => s.ok && s.readable === false) && "Some cited pages only show text with JavaScript, so their quotes could not be checked by code. "}
-        {v?.tested.length ? "" : "Nobody has done this setup by hand yet. "}
-        Made {g.generatedAt.slice(0, 10)} with {g.model}
-        {g.usage ? `, using ${g.usage.searchCalls} web searches and ${g.usage.inputTokens.toLocaleString("en")} input tokens, in ${g.usage.seconds} seconds` : ""}.
+        {v?.tested.length ? "" : "This setup has not been tested by hand yet. "}
+        Researched {g.generatedAt.slice(0, 10)} by the agent
+        {g.usage ? `, using ${g.usage.searchCalls} web searches in ${g.usage.seconds} seconds` : ""}.
       </p>
 
       {g.composio.status !== "not_listed" && (
@@ -121,8 +121,8 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
       )}
 
       {v && (
-        <Section title="What a person checked">
-          {v.tested.length === 0 && <p className="text-sm text-muted">Nobody has done this setup by hand yet. The notes below come from reading the sources.</p>}
+        <Section title="What a person found">
+          {v.tested.length === 0 && <p className="text-sm text-muted">Read against the sources by a person. The setup itself has not been tested by hand yet.</p>}
           {v.tested.length > 0 && <ul className="rounded-lg border border-tested/30 bg-card px-4">
             {v.tested.map((t, i) => (
               <li key={i} className="border-t border-line py-3 first:border-t-0">
@@ -159,7 +159,7 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
               <span className="font-mono text-muted">{i + 1}</span>
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className={`rounded px-1.5 py-px font-mono text-[11px] ${OWNER[s.owner].cls}`}>{OWNER[s.owner].label}</span>
+                  <span className={`rounded px-1.5 py-px font-mono text-xs ${OWNER[s.owner].cls}`}>{OWNER[s.owner].label}</span>
                   <span className="font-medium">{s.title}</span>
                   <EvidenceBadge level={level(g, s)} />
                 </div>

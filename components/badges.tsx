@@ -9,7 +9,7 @@ const LEVEL: Record<Level, { label: string; cls: string; title: string }> = {
 export function EvidenceBadge({ level }: { level: Level }) {
   const l = LEVEL[level];
   return (
-    <span title={l.title} className={`inline-block whitespace-nowrap rounded border px-1.5 py-px font-mono text-[11px] ${l.cls}`}>
+    <span title={l.title} className={`inline-block whitespace-nowrap rounded border px-2 py-0.5 font-mono text-xs ${l.cls}`}>
       {l.label}
     </span>
   );
@@ -17,7 +17,7 @@ export function EvidenceBadge({ level }: { level: Level }) {
 
 export function TestedBadge() {
   return (
-    <span title="A person did this setup and recorded the result." className="inline-block whitespace-nowrap rounded border border-tested/40 bg-tested/5 px-1.5 py-px font-mono text-[11px] text-tested">
+    <span title="A person did this setup and recorded the result." className="inline-block whitespace-nowrap rounded border border-tested/40 bg-tested/5 px-2 py-0.5 font-mono text-xs text-tested">
       tested by hand
     </span>
   );
@@ -44,7 +44,7 @@ export function ComposioPill({ status, slug }: { status: string; slug: string | 
     : status === "bring_your_own" ? "Bring your own app on Composio"
     : "Not a Composio toolkit";
   return (
-    <span className="inline-block rounded border border-line bg-card px-2 py-0.5 font-mono text-xs text-muted">
+    <span className="inline-block rounded border border-line bg-card px-2 py-0.5 text-sm text-muted">
       {text}{slug ? ` · ${slug}` : ""}
     </span>
   );

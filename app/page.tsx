@@ -16,7 +16,7 @@ function Stat({ value, label, note }: { value: string; label: string; note?: str
     <div>
       <div className="font-serif text-4xl leading-none">{value}</div>
       <div className="mt-2 text-sm">{label}</div>
-      {note && <div className="mt-0.5 font-mono text-[11px] text-muted">{note}</div>}
+      {note && <div className="mt-0.5 font-mono text-xs text-muted">{note}</div>}
     </div>
   );
 }
@@ -30,20 +30,21 @@ export default async function Home() {
 
   return (
     <>
-      <section className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-end">
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">For developers whose agents connect to their users&apos; apps</p>
+          <p className="font-mono text-sm uppercase tracking-[0.14em] text-muted">For developers whose agents connect to their users&apos; apps</p>
           <h1 className="mt-4 font-serif text-5xl leading-[1.02] sm:text-7xl">Will my OAuth app take an hour, or six&nbsp;weeks?</h1>
-          <p className="mt-5 max-w-xl text-lg">
-            Before your users can connect an app to your agent, you may need your own OAuth app with that provider,
-            and their approval. Each guide tells you how hard it is, how long, what can block you, and which steps
-            an agent already did for you. Every claim shows its evidence.
-          </p>
         </div>
-        <div>
-          <h2 className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">Any app, researched live by an agent</h2>
-          <Generate needsCode={Boolean(process.env.ACCESS_CODE)} />
-        </div>
+        <p className="text-lg lg:pb-2">
+          Before your users can connect an app to your agent, you may need your own OAuth app with that provider,
+          and their approval. Each guide tells you how hard it is, how long, what can block you, and which steps
+          an agent already did for you. Every claim shows its evidence.
+        </p>
+      </section>
+
+      <section className="mt-10" aria-labelledby="research">
+        <h2 id="research" className="mb-3 font-mono text-sm uppercase tracking-wide text-muted">Look up any app, researched live by an agent</h2>
+        <Generate needsCode={Boolean(process.env.ACCESS_CODE)} guides={[...lib, ...live].map((g) => ({ slug: g.slug, app: g.app }))} />
       </section>
 
       {cc && (
@@ -61,7 +62,7 @@ export default async function Home() {
               </div>
               <div className="flex flex-1 items-center bg-ink px-3 font-mono text-xs text-paper">{cc.bringYourOwn} bring your own app</div>
             </div>
-            <p className="mt-2 font-mono text-[11px] text-muted">Read from Composio&apos;s managed-auth list by code, refreshed every 6 hours.</p>
+            <p className="mt-2 font-mono text-xs text-muted">Read from Composio&apos;s managed-auth list by code, refreshed every 6 hours.</p>
           </div>
         </section>
       )}
@@ -94,7 +95,7 @@ export default async function Home() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
           <Stat value={`${stats.checkedShare}%`} label="claims quote checked" note={`${stats.checked} of ${stats.claims}`} />
           <Stat value={String(stats.corrections)} label="corrections by a person" note="shown on each guide" />
-          <Stat value={String(stats.library)} label="checked guides" note={`plus ${stats.live} made live`} />
+          <Stat value={String(stats.library)} label="guides read by a person" note={`plus ${stats.live} made live`} />
           <Stat value={String(stats.unsure)} label="claims marked unsure" note="said, not guessed" />
           <Stat value={stats.avgSeconds ? `${stats.avgSeconds}s` : "-"} label="for a live guide" note={stats.measuredRuns ? `average of ${stats.measuredRuns} measured runs` : "not measured yet"} />
           <Stat value={stats.avgSearches !== null ? String(stats.avgSearches) : "-"} label="web searches per guide" note="most of the cost of a run" />
