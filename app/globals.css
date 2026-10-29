@@ -37,3 +37,13 @@ body {
 }
 
 a { text-underline-offset: 3px; }
+
+/* Bar that slides across while the agent works; it has no real progress to show. */
+@keyframes loader-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(300%); }
+}
+.loader-bar { animation: loader-slide 1.4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .loader-bar { animation: none; width: 100%; opacity: 0.4; }
+}

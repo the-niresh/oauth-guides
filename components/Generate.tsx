@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Line = { text: string; kind: "step" | "error" };
@@ -11,13 +11,28 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
   const [code, setCode] = useState("");
   const [lines, setLines] = useState<Line[]>([]);
   const [busy, setBusy] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const logRef = useRef<HTMLOListElement>(null);
   // Set when the app already has a live-made guide, so the next click runs a fresh one.
   const [found, setFound] = useState<string | null>(null);
+
+  // A running clock, so a long quiet stretch while the agent reads pages does not look hung.
+  useEffect(() => {
+    if (!busy) return;
+    const start = Date.now();
+    const t = setInterval(() => setElapsed(Math.floor((Date.now() - start) / 1000)), 1000);
+    return () => clearInterval(t);
+  }, [busy]);
+
+  useEffect(() => {
+    logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
+  }, [lines]);
 
   async function run(e: React.FormEvent, fresh = false) {
     e.preventDefault();
     if (!app.trim() || busy) return;
     setFound(null);
+    setElapsed(0);
     setBusy(true);
     setLines([{ text: `Starting research on ${app.trim()}. This takes one to three minutes.`, kind: "step" }]);
     try {
@@ -86,8 +101,15 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
         )}
         <button
           disabled={busy || !app.trim()}
-          className="rounded-md bg-ink px-4 py-2 text-paper transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-40"
+          aria-busy={busy}
+          className={`inline-flex items-center justify-center gap-2 rounded-md bg-ink px-4 py-2 text-paper transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 ${busy ? "cursor-wait" : "disabled:opacity-40"}`}
         >
+          {busy && (
+            <svg className="size-4 animate-spin motion-reduce:animate-none" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.25" strokeWidth="3" />
+              <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+          )}
           {busy ? "Researching..." : "Make a guide"}
         </button>
       </form>
@@ -98,7 +120,7 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
         </div>
       )}
       {lines.length > 0 && (
-        <ol className="mt-4 max-h-80 space-y-1 overflow-y-auto font-mono text-xs" aria-live="polite">
+        <ol ref={logRef} className="mt-4 max-h-80 space-y-1 overflow-y-auto font-mono text-xs" aria-live="polite">
           {lines.map((l, i) => (
             <li key={i} className={l.kind === "error" ? "text-[var(--hard)]" : "text-muted"}>
               <span className="select-none">{l.kind === "error" ? "!  " : "›  "}</span>
@@ -106,6 +128,23 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
             </li>
           ))}
         </ol>
+      )}
+      {busy && (
+        <div className="mt-4" role="status">
+          <div className="flex items-center justify-between font-mono text-xs text-muted">
+            <span className="flex items-center gap-2">
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-checked opacity-60 motion-reduce:animate-none" />
+                <span className="relative inline-flex size-2 rounded-full bg-checked" />
+              </span>
+              Agent is working
+            </span>
+            <span>{Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")} · usually 1 to 3 min</span>
+          </div>
+          <div className="loader-track mt-2 h-1 overflow-hidden rounded-full bg-line">
+            <div className="loader-bar h-full w-1/3 rounded-full bg-ink" />
+          </div>
+        </div>
       )}
     </div>
   );
