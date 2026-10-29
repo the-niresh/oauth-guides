@@ -1,0 +1,9 @@
+{
+  "checkedBy": "Niresh (checked with Claude Code)",
+  "tested": [],
+  "corrections": [],
+  "notes": [
+    "X's help center blocks our checker (HTTP 403), so the AI reply bot rule shows as unsure even though the agent quoted it. Open the link to read it.",
+    "developer.x.com builds its page with JavaScript, so its quotes show as source only."
+  ]
+}

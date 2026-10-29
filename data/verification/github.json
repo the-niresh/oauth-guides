@@ -1,0 +1,14 @@
+{
+  "checkedBy": "Niresh (checked with Claude Code)",
+  "tested": [],
+  "corrections": [
+    {
+      "agentSaid": "Difficulty medium: I marked this medium because registration is quick, but real users can hit org-owner approval, OAuth-app rate limits, and optional Marketplace verification; OAuth apps also have less fine-grained control than GitHub Apps.",
+      "actually": "Difficulty easy. GitHub does not review OAuth apps. Organization approval is a setting each customer organization controls, and a Marketplace listing is optional, so neither should set the difficulty.",
+      "source": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app"
+    }
+  ],
+  "notes": [
+    "Checked by hand: the 2,000 access token requests per hour limit is on the GitHub rate limits page, word for word."
+  ]
+}

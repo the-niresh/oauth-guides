@@ -1,0 +1,382 @@
+{
+  "app": "LinkedIn",
+  "website": "https://www.linkedin.com",
+  "developerPortalUrl": "https://developer.linkedin.com",
+  "summary": "LinkedIn OAuth for an AI agent is self-serve if you stay within the open consumer scopes: sign in/profile/email and Share on LinkedIn. The catch is that the open set is small, redirect URLs must match exactly, and broader profile editing or marketing/community-management access needs separate approval or is closed.",
+  "difficulty": "easy",
+  "difficultyReason": "The core setup is self-serve in the Developer Portal and the open consumer permissions are available without special approval. The main limitation is scope: the agent can sign in, read basic profile/email, and post/comment/like, but more advanced write or partner APIs move you into reviewed programs.",
+  "timeToFirstLogin": {
+    "text": "15 to 30 minutes",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day for open consumer scopes; longer if you need Page-association approval or any partner-program review.",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [],
+  "requirements": [
+    {
+      "text": "Create the app in LinkedIn Developer Portal with an app name, LinkedIn Page, privacy policy URL, and logo.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "In the Privacy policy URL box, enter your privacy policy URL."
+    },
+    {
+      "text": "Associate the app with a LinkedIn Page; apps stay tied to that Page.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "Apps are permanently associated with a specific LinkedIn Page and cannot be transferred to another page."
+    },
+    {
+      "text": "Add the exact HTTPS redirect URI you use in Composio; it must match one of the app's Redirect URLs.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "This value must match one of the Redirect URLs defined in your application configuration."
+    },
+    {
+      "text": "Use the OpenID Connect product for sign-in scopes; LinkedIn now uses openid, profile, and email.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "We are also introducing new scopes `profile` and `email`."
+    },
+    {
+      "text": "Use Share on LinkedIn for posting/commenting/liking on behalf of the member.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/it-it/linkedin/consumer/integrations/self-serve/share-on-linkedin?context=linkedin/consumer/context",
+      "quote": "make sure to request the `w_member_social` scope!"
+    },
+    {
+      "text": "If you change scopes later, make users re-authenticate.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "If the `scope` permissions are changed in your app, your users must re-authenticate"
+    },
+    {
+      "text": "Plan for LinkedIn's sign-in/userinfo daily rate limits.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "Member  | 500 Requests"
+    },
+    {
+      "text": "Plan for LinkedIn's share API daily rate limits.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/it-it/linkedin/consumer/integrations/self-serve/share-on-linkedin?context=linkedin/consumer/context",
+      "quote": "Member  | 150 Requests"
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "Marketing / Advertising API permissions require approval.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Developers seeking to build a marketing related integration using Advertising API permissions must be approved."
+    },
+    {
+      "text": "Sales Navigator permissions require SNAP partner approval.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Developers seeking to build sales related integration using one of the permissions below must be approved as a Sales Navigator Application Platform (SNAP) partner."
+    },
+    {
+      "text": "Talent integrations require applying to the specific program.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Developers seeking to build talent related integrations through one of the programs listed below can apply here."
+    },
+    {
+      "text": "Compliance access is closed and may not be requested.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Access is closed and may not be requested."
+    },
+    {
+      "text": "Profile Edit API access is restricted to approved developers.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/integrations/people/profile-edit-api",
+      "quote": "The use of this API is restricted to those developers approved by LinkedIn."
+    },
+    {
+      "text": "Community Management APIs require an access request review and are for commercial use cases only.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review?view=li-lms-2026-01",
+      "quote": "To access the Community Management APIs, every developer must complete an access request form(s)"
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Create or confirm your LinkedIn Page",
+      "detail": "If you do not already have one, create a LinkedIn Page first; some products require it and the app is tied to that Page.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "For certain functionality and products, you're required to associate your app with a LinkedIn Page."
+    },
+    {
+      "owner": "you",
+      "title": "Create the app in the Developer Portal",
+      "detail": "Go to My Apps > Create app, enter the app name, LinkedIn Page, privacy policy URL, and logo, then accept the terms.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "Click My apps in the upper-right corner of the page."
+    },
+    {
+      "owner": "you",
+      "title": "Add the Composio redirect URL",
+      "detail": "On the Auth tab, add the exact HTTPS redirect URL shown in your Composio auth config.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "Add the redirect (callback) URL via `HTTPS` to your server."
+    },
+    {
+      "owner": "you",
+      "title": "Enable the products you need",
+      "detail": "Request Sign in with LinkedIn using OpenID Connect and Share on LinkedIn in the Products tab.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "The following permissions are available to all developers, and may be added via self-service through the LinkedIn Developer Portal"
+    },
+    {
+      "owner": "you",
+      "title": "Copy your app credentials",
+      "detail": "Copy the Client ID and Client Secret from the Auth tab and store them securely.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "Do not share your Client Secret value with anyone"
+    },
+    {
+      "owner": "you",
+      "title": "Request the minimum scopes",
+      "detail": "Use openid, profile, email, and w_member_social for login plus posting/commenting/liking, and avoid extra scopes you cannot justify.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "Use the OpenID scope `openid` to get the ID Token."
+    },
+    {
+      "owner": "wait",
+      "title": "Member authorizes the app",
+      "detail": "The user signs in, approves the consent screen, and LinkedIn returns an authorization code.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "The code is a value that you exchange with LinkedIn for an OAuth 2.0 access token"
+    },
+    {
+      "owner": "you",
+      "title": "Exchange the code for tokens",
+      "detail": "Swap the code for an access token, then store the token and build for reauth before expiry.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "To protect members' data, LinkedIn does not generate long-lived access tokens."
+    },
+    {
+      "owner": "you",
+      "title": "Test identity read and posting",
+      "detail": "Verify the grant by calling the profile/userinfo endpoint and a small post flow before exposing it to users.",
+      "status": "unsure",
+      "sourceUrl": null,
+      "quote": null
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "LinkedIn does not expose a general self-serve profile-edit permission.",
+      "whatToDo": "Limit the product to sign-in plus posting/commenting/liking, or apply for the restricted profile-edit path if your use case truly needs it.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/integrations/people/profile-edit-api",
+      "quote": "The use of this API is restricted to those developers approved by LinkedIn."
+    },
+    {
+      "problem": "Programmatic refresh tokens are not broadly available.",
+      "whatToDo": "Assume you will need a re-authentication flow when the 60-day access token expires unless LinkedIn enables refresh tokens for your app.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens",
+      "quote": "Programmatic refresh tokens are available for a limited set of partners."
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "AI assistant that lets a LinkedIn member sign in, read basic profile and email data for identity, and create posts or engage with posts on their behalf after explicit consent."
+    },
+    {
+      "title": "Why we request openid, profile, and email",
+      "text": "We use these scopes only to authenticate the member and retrieve the basic profile and email needed to identify the connected account and personalize the experience."
+    },
+    {
+      "title": "Why we request w_member_social",
+      "text": "We use this scope so the member can ask the assistant to create posts, comments, or likes on LinkedIn after the member explicitly approves the action."
+    }
+  ],
+  "openQuestions": [
+    "Does your agent need anything beyond basic profile/email and post/comment/like? I could not confirm a public self-serve scope for general member editing or direct messages.",
+    "Do you want to use only the Composio managed app first, or do you need your own LinkedIn app immediately for branding and custom scopes?",
+    "LinkedIn's public docs I checked did not publish a fee for the open consumer scopes."
+  ],
+  "slug": "linkedin",
+  "generatedAt": "2026-10-29T07:37:16.034Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "LINKEDIN",
+    "name": "LinkedIn",
+    "checkedAt": "2026-10-29T07:35:12.892Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "In the Privacy policy URL box, enter your privacy policy URL.",
+          "found": true
+        },
+        {
+          "quote": "Apps are permanently associated with a specific LinkedIn Page and cannot be transferred to another page.",
+          "found": true
+        },
+        {
+          "quote": "For certain functionality and products, you're required to associate your app with a LinkedIn Page.",
+          "found": true
+        },
+        {
+          "quote": "Click My apps in the upper-right corner of the page.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "This value must match one of the Redirect URLs defined in your application configuration.",
+          "found": true
+        },
+        {
+          "quote": "If the `scope` permissions are changed in your app, your users must re-authenticate",
+          "found": true
+        },
+        {
+          "quote": "Add the redirect (callback) URL via `HTTPS` to your server.",
+          "found": true
+        },
+        {
+          "quote": "Do not share your Client Secret value with anyone",
+          "found": true
+        },
+        {
+          "quote": "The code is a value that you exchange with LinkedIn for an OAuth 2.0 access token",
+          "found": true
+        },
+        {
+          "quote": "To protect members' data, LinkedIn does not generate long-lived access tokens.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "We are also introducing new scopes `profile` and `email`.",
+          "found": true
+        },
+        {
+          "quote": "Member  | 500 Requests",
+          "found": false
+        },
+        {
+          "quote": "Use the OpenID scope `openid` to get the ID Token.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/it-it/linkedin/consumer/integrations/self-serve/share-on-linkedin?context=linkedin/consumer/context",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "make sure to request the `w_member_social` scope!",
+          "found": true
+        },
+        {
+          "quote": "Member  | 150 Requests",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Developers seeking to build a marketing related integration using Advertising API permissions must be approved.",
+          "found": true
+        },
+        {
+          "quote": "Developers seeking to build sales related integration using one of the permissions below must be approved as a Sales Navigator Application Platform (SNAP) partner.",
+          "found": true
+        },
+        {
+          "quote": "Developers seeking to build talent related integrations through one of the programs listed below can apply here.",
+          "found": true
+        },
+        {
+          "quote": "Access is closed and may not be requested.",
+          "found": true
+        },
+        {
+          "quote": "The following permissions are available to all developers, and may be added via self-service through the LinkedIn Developer Portal",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/integrations/people/profile-edit-api",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The use of this API is restricted to those developers approved by LinkedIn.",
+          "found": true
+        },
+        {
+          "quote": "The use of this API is restricted to those developers approved by LinkedIn.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review?view=li-lms-2026-01",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "To access the Community Management APIs, every developer must complete an access request form(s)",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Programmatic refresh tokens are available for a limited set of partners.",
+          "found": false
+        }
+      ]
+    }
+  ],
+  "checkedAt": "2026-10-29T07:39:58.486Z"
+}

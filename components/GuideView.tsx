@@ -72,7 +72,8 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
       <div className="mt-4 rounded-lg border border-line bg-card p-4 text-sm">
         <span className="font-medium">How sure is this guide? </span>
         {c.checked} claims have a quote we found on the cited page, {c["source-only"]} cite a page we could not check,
-        and {c.unsure} have no source. {v ? `A person tested ${v.tested.length} parts by hand.` : "Nobody has tested this setup by hand yet."}
+        and {c.unsure} have no source. {v?.tested.length ? `A person tested ${v.tested.length} parts by hand.` : "Nobody has tested this setup by hand yet."}
+        {v?.corrections.length ? ` ${v.corrections.length} correction${v.corrections.length > 1 ? "s" : ""} made after checking.` : ""}
         <span className="text-muted"> Made {g.generatedAt.slice(0, 10)} with {g.model}.</span>
       </div>
 
@@ -89,8 +90,9 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
       )}
 
       {v && (
-        <Section title="What a person tested">
-          <ul className="rounded-lg border border-tested/30 bg-card px-4">
+        <Section title="What a person checked">
+          {v.tested.length === 0 && <p className="text-sm text-muted">Nobody has done this setup by hand yet. The notes below come from reading the sources.</p>}
+          {v.tested.length > 0 && <ul className="rounded-lg border border-tested/30 bg-card px-4">
             {v.tested.map((t, i) => (
               <li key={i} className="border-t border-line py-3 first:border-t-0">
                 <div className="flex items-start justify-between gap-3">
@@ -100,7 +102,7 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
                 <div className="mt-1 font-mono text-xs text-muted">{t.date}{t.minutes != null ? ` · took ${t.minutes} min` : ""} · {v.checkedBy}</div>
               </li>
             ))}
-          </ul>
+          </ul>}
           {v.corrections.length > 0 && (
             <>
               <h3 className="mt-6 font-medium">What we corrected after checking</h3>

@@ -29,7 +29,9 @@ In Composio, the redirect URI to register is shown in the Composio dashboard whe
 
 How to research:
 - Use web search. Prefer the provider's own developer docs, policy pages and official forums. Third-party blogs only when official docs say nothing, and say so in the text.
-- Find: where to create the app, account or plan needed, app types, redirect URI rules, scopes, which scopes or features need review or verification, how review works and how long it takes, costs or paid API tiers, business or domain verification, rate limits for new apps, test or development mode limits (for example a cap on test users).
+- The developer's AI agent will act inside ${app} for each user: read their data and write to it (send, post, create, update). Research the scopes an agent like that needs, both read and write. Do not stop at "sign in with ${app}"; login-only scopes are not the use case.
+- Find: where to create the app, account or plan needed, app types, redirect URI rules, the read and write scopes, which scopes or features need review or verification, how review works and how long it takes, costs or paid API tiers, business or domain verification.
+- Always look for limits on apps that are not yet reviewed or approved: user caps (for example a maximum number of users before verification), test mode limits, token expiry in test mode, and lower rate limits for unreviewed or unlisted apps. These are what surprise developers most.
 
 Evidence rules (most important):
 - status "sourced" only when a page you actually opened says it. Put that page in sourceUrl and copy a short exact sentence from it into quote, word for word. Do not paraphrase inside quote.
@@ -45,9 +47,23 @@ Steps:
 
 agentDrafts: write text the developer can paste, such as the app description, and for each scope that needs review, one or two sentences on why the app needs it. Write them for an AI agent product that acts for the user.
 
-Difficulty: easy = self-serve in under an hour with no review for common scopes; medium = self-serve but review or limits for real use; hard = review that takes days or weeks, or business verification; blocked = needs a partner program or approval most developers will not get.
+Difficulty is about what it takes before real users (not only the developer) can connect with the read and write scopes an agent needs. Optional extras, like a public marketplace listing, do not set the difficulty; mention them as steps.
+- easy: self-serve, under an hour, no review and no user cap for those scopes.
+- medium: self-serve, but real use hits a review, a user cap, a paid tier, or rate limits that hurt an agent.
+- hard: a review or verification that takes days or weeks, a security assessment, or business verification, before real users can connect.
+- blocked: needs a partner program or approval most developers will not get.
 
-Write in plain, short sentences.`;
+Write in plain, short sentences. Do not put links or markdown inside text fields; sources go only in sourceUrl.`;
+}
+
+// The web search tool adds " ([site](url))" citations inside text. Sources already have
+// their own field, so these are removed everywhere except sourceUrl and quote.
+const CITE = /\s*\(\[[^\]]*\]\([^)]*\)\)/g;
+function stripCitations<T>(v: T, key = ""): T {
+  if (typeof v === "string") return (key === "sourceUrl" || key === "quote" ? v : v.replace(CITE, "").trim()) as T;
+  if (Array.isArray(v)) return v.map((x) => stripCitations(x)) as T;
+  if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, stripCitations(x, k)])) as T;
+  return v;
 }
 
 export async function runAgent(app: string, emit: (e: AgentEvent) => void): Promise<Guide> {
@@ -83,8 +99,9 @@ export async function runAgent(app: string, emit: (e: AgentEvent) => void): Prom
       emit({ type: "step", text: "Writing the guide" });
     }
   }
-  const draft = (await stream.finalResponse()).output_parsed;
-  if (!draft) throw new Error("The model did not return a guide.");
+  const parsed = (await stream.finalResponse()).output_parsed;
+  if (!parsed) throw new Error("The model did not return a guide.");
+  const draft = stripCitations(parsed);
 
   const cited = new Set(allCited(draft).map((c) => c.sourceUrl).filter(Boolean));
   emit({ type: "step", text: `Opening ${cited.size} cited pages to check the quotes` });

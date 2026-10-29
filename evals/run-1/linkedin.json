@@ -1,0 +1,303 @@
+{
+  "app": "LinkedIn",
+  "website": "https://www.linkedin.com/",
+  "developerPortalUrl": "https://developer.linkedin.com/",
+  "summary": "Create a LinkedIn app in the Developer Portal, add your company page, register an exact HTTPS redirect URI, and request the OpenID Connect product and scopes you need. The main catch is that basic sign-in scopes are self-serve, but any Marketing, Sales, Talent, or other restricted permissions go through LinkedIn review.",
+  "difficulty": "easy",
+  "difficultyReason": "Basic Sign in with LinkedIn is self-serve and open permissions do not need special approval. It only gets harder if you need restricted products, because LinkedIn requires an access form and review.",
+  "timeToFirstLogin": {
+    "text": "15 to 30 minutes (estimate)",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day for basic sign-in (estimate)",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [],
+  "requirements": [
+    {
+      "text": "You need a LinkedIn account to log into the Developer Portal.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a526048",
+      "quote": "logging into the Developer portal using your LinkedIn account"
+    },
+    {
+      "text": "Create the app with a LinkedIn Page/company page.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "associate your app with a LinkedIn Page"
+    },
+    {
+      "text": "Add a privacy policy URL and upload a logo for the app.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "In the Privacy policy URL box, enter your privacy policy URL."
+    },
+    {
+      "text": "Register an exact HTTPS redirect URI in the Auth tab.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "Add the redirect (callback) URL via `HTTPS` to your server."
+    },
+    {
+      "text": "Request the OpenID Connect product and use the openid, profile, and email scopes for login.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "We are also introducing new scopes `profile` and `email`."
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "Any Marketing/Advertising API permission needs LinkedIn approval.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Developers seeking to build a marketing related integration using Advertising API permissions must be approved."
+    },
+    {
+      "text": "Restricted products use an access request form and LinkedIn reviews the submission.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a527289",
+      "quote": "Complete the Access Request Form."
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Log into the Developer Portal",
+      "detail": "Go to developer.linkedin.com, open My apps, and start a new app.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a526048",
+      "quote": "Click My Apps from the top of the page and select Create App."
+    },
+    {
+      "owner": "you",
+      "title": "Fill in the app details",
+      "detail": "Enter the app name, company LinkedIn Page, privacy policy URL, and logo, then create the app.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "Enter your app name in the App name box."
+    },
+    {
+      "owner": "you",
+      "title": "Open the Auth tab",
+      "detail": "Copy the Client ID and Client Secret from the app's Auth tab.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "Click the Auth tab to view your application credentials."
+    },
+    {
+      "owner": "you",
+      "title": "Register the redirect URL",
+      "detail": "Add the exact callback URL in the Auth tab. Use HTTPS and do not change the path, domain, or pre-registered query parameters.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/verified-on-linkedin/guides/verification-url",
+      "quote": "The redirectUri must exactly match a URL registered in your LinkedIn Developer App's Auth tab."
+    },
+    {
+      "owner": "you",
+      "title": "Enable the sign-in product",
+      "detail": "In Products, request Sign In with LinkedIn using OpenID Connect.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "request the Sign in with LinkedIn using OpenID Connect product."
+    },
+    {
+      "owner": "you",
+      "title": "Build the OAuth request",
+      "detail": "Send users to LinkedIn's authorization page with openid, profile, and email in the scope list.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "quote": "make sure you use the OpenID scope `openid`"
+    },
+    {
+      "owner": "you",
+      "title": "Exchange the code for tokens",
+      "detail": "Handle the callback, exchange the authorization code, and store the access token securely.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "quote": "The `code` is a value that you exchange with LinkedIn for an OAuth 2.0 access token"
+    },
+    {
+      "owner": "wait",
+      "title": "Wait for LinkedIn review if you requested restricted products",
+      "detail": "LinkedIn will review the access form and notify you of the status and outcome.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a527289",
+      "quote": "we’ll review and notify you of the status and outcome."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "You do not have a LinkedIn Page yet.",
+      "whatToDo": "Create a LinkedIn Page first, then come back and create the app.",
+      "status": "sourced",
+      "sourceUrl": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "quote": "If you don't have a LinkedIn Page, you can create one"
+    },
+    {
+      "problem": "Your redirect URL does not match exactly.",
+      "whatToDo": "Copy the exact Composio callback URL from the auth config and register it exactly as shown.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/verified-on-linkedin/guides/verification-url",
+      "quote": "Wildcard or prefix matching is not supported."
+    },
+    {
+      "problem": "You need more than basic sign-in scopes.",
+      "whatToDo": "Request the right product in Products and complete LinkedIn's access form or partner application.",
+      "status": "sourced",
+      "sourceUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "quote": "Most permissions and partner programs require explicit approval from LinkedIn."
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "Our app lets members sign in with LinkedIn so our AI agent can connect their account, identify the member, and use only the basic profile and email needed for account setup."
+    },
+    {
+      "title": "Scope rationale",
+      "text": "openid is needed to authenticate the member. profile is needed to read the member's basic profile and avatar. email is needed to match the LinkedIn account to the user's profile and support account recovery."
+    }
+  ],
+  "openQuestions": [
+    "Do you only need Sign In with LinkedIn OpenID Connect, or do you also need Marketing, Sales, Talent, or other restricted APIs?",
+    "What exact redirect URI does Composio show in your auth config?",
+    "LinkedIn does not publish a single universal review timeline for restricted products in the docs I checked."
+  ],
+  "slug": "linkedin",
+  "generatedAt": "2026-10-29T07:33:10.780Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "LINKEDIN",
+    "name": "LinkedIn",
+    "checkedAt": "2026-10-29T07:31:51.067Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://www.linkedin.com/help/linkedin/answer/a526048",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "logging into the Developer portal using your LinkedIn account",
+          "found": true
+        },
+        {
+          "quote": "Click My Apps from the top of the page and select Create App.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://www.linkedin.com/help/linkedin/answer/a1667239",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "associate your app with a LinkedIn Page",
+          "found": true
+        },
+        {
+          "quote": "In the Privacy policy URL box, enter your privacy policy URL.",
+          "found": true
+        },
+        {
+          "quote": "Enter your app name in the App name box.",
+          "found": true
+        },
+        {
+          "quote": "If you don't have a LinkedIn Page, you can create one",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Add the redirect (callback) URL via `HTTPS` to your server.",
+          "found": false
+        },
+        {
+          "quote": "Click the Auth tab to view your application credentials.",
+          "found": true
+        },
+        {
+          "quote": "The `code` is a value that you exchange with LinkedIn for an OAuth 2.0 access token",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "We are also introducing new scopes `profile` and `email`.",
+          "found": false
+        },
+        {
+          "quote": "request the Sign in with LinkedIn using OpenID Connect product.",
+          "found": true
+        },
+        {
+          "quote": "make sure you use the OpenID scope `openid`",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Developers seeking to build a marketing related integration using Advertising API permissions must be approved.",
+          "found": true
+        },
+        {
+          "quote": "Most permissions and partner programs require explicit approval from LinkedIn.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://www.linkedin.com/help/linkedin/answer/a527289",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Complete the Access Request Form.",
+          "found": true
+        },
+        {
+          "quote": "we’ll review and notify you of the status and outcome.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/verified-on-linkedin/guides/verification-url",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The redirectUri must exactly match a URL registered in your LinkedIn Developer App's Auth tab.",
+          "found": true
+        },
+        {
+          "quote": "Wildcard or prefix matching is not supported.",
+          "found": true
+        }
+      ]
+    }
+  ]
+}

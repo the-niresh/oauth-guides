@@ -26,7 +26,8 @@ async function Row({ g }: { g: Guide }) {
         <span className="text-checked">{c.checked} checked</span><br />
         <span className="text-source">{c["source-only"]} source only</span><br />
         <span className="text-unsure">{c.unsure} unsure</span>
-        {v && <><br /><span className="text-tested">{v.tested.length} tested</span></>}
+        {v && v.tested.length > 0 && <><br /><span className="text-tested">{v.tested.length} tested</span></>}
+        {v && v.corrections.length > 0 && <><br /><span className="text-ink">{v.corrections.length} corrected</span></>}
       </td>
     </tr>
   );
@@ -37,7 +38,7 @@ function Table({ guides }: { guides: Guide[] }) {
     <div className="overflow-x-auto">
       <table className="w-full min-w-[640px] text-left">
         <thead className="font-mono text-xs uppercase tracking-wide text-muted">
-          <tr><th className="pb-2">App</th><th className="pb-2">Difficulty</th><th className="pb-2">First test login</th><th className="pb-2">Any user can connect</th><th className="pb-2">Evidence</th></tr>
+          <tr>{["App", "Difficulty", "First test login", "Any user can connect", "Evidence"].map((h) => <th key={h} className="pr-3 pb-2 align-bottom">{h}</th>)}</tr>
         </thead>
         <tbody>{guides.map((g) => <Row key={g.slug} g={g} />)}</tbody>
       </table>

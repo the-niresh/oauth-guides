@@ -1,0 +1,336 @@
+{
+  "app": "Slack",
+  "website": "https://slack.com",
+  "developerPortalUrl": "https://docs.slack.dev/",
+  "summary": "Slack OAuth is self-serve for private installs: create a Slack app, add your HTTPS redirect URI, request only the scopes you need, and install it. The catch is that Marketplace approval adds scope restrictions and a long manual review.",
+  "difficulty": "hard",
+  "difficultyReason": "Private installs are quick, but Slack Marketplace approval can take weeks and rejects restricted scopes or apps that are not production-ready.",
+  "timeToFirstLogin": {
+    "text": "About 15–30 minutes, but this is only an estimate.",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "If you want Slack Marketplace approval, plan on up to 10 business days for preliminary feedback and up to 10 weeks for the functional review on new submissions.",
+    "status": "sourced",
+    "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+    "quote": "up to 10 weeks for new submissions"
+  },
+  "costs": [
+    {
+      "text": "Slack Developer Services are free.",
+      "status": "sourced",
+      "sourceUrl": "https://slack.com/terms-of-service/slack-developer-program",
+      "quote": "We currently provide the Developer Services at no charge."
+    },
+    {
+      "text": "Slack's Free plan is $0 and allows up to 10 apps.",
+      "status": "sourced",
+      "sourceUrl": "https://slack.com/pricing/free",
+      "quote": "Up to 10 apps"
+    }
+  ],
+  "requirements": [
+    {
+      "text": "You need a Slack workspace with privileges to install apps.",
+      "status": "sourced",
+      "sourceUrl": "https://api.slack.com/authentication/postman",
+      "quote": "A Slack workspace with privileges to install apps."
+    },
+    {
+      "text": "Your redirect URI must be HTTPS.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "quote": "The `redirect_uri` must use HTTPS."
+    },
+    {
+      "text": "If you want Slack Marketplace review, your app must be installed on 10 or more active workspaces.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "quote": "installed on 10 or more active workspaces"
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "Submitting the app to the Slack Marketplace triggers manual review.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/faq/",
+      "quote": "If you don't submit your app, we won't display it there"
+    },
+    {
+      "text": "Changing approved scopes or adding new features later requires review again.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/faq/",
+      "quote": "you'll need your app to be reviewed again."
+    },
+    {
+      "text": "Slack flags restricted or broad scopes for Marketplace review, including identity.*, workflow.steps:execute, read, post, client, admin.*, search:read, and triggers:*.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "quote": "identity.*, workflow.steps:execute, read, post, client, admin.*, search:read, triggers:*"
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Choose private install or Marketplace",
+      "detail": "If you only need a direct authorization URL, skip Marketplace. If you want Slack to list the app, plan for review.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/faq/",
+      "quote": "If you don't submit your app, we won't display it there"
+    },
+    {
+      "owner": "you",
+      "title": "Create a Slack app",
+      "detail": "Open Slack App Management, click Create a Slack app, choose From Scratch, and pick the workspace where you will build and test.",
+      "status": "sourced",
+      "sourceUrl": "https://api.slack.com/authentication/postman",
+      "quote": "Choose From Scratch and give your app a name and workspace to live on."
+    },
+    {
+      "owner": "you",
+      "title": "Add the redirect URI",
+      "detail": "Paste the exact HTTPS redirect URL into OAuth & Permissions and save it.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "quote": "The `redirect_uri` must use HTTPS."
+    },
+    {
+      "owner": "you",
+      "title": "Add the minimum scopes",
+      "detail": "Use only the bot scopes your app needs, and add user scopes only if your app must act on behalf of a user.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "quote": "The `scope` list requests scopes for your app's bot user."
+    },
+    {
+      "owner": "you",
+      "title": "Install and verify OAuth",
+      "detail": "Generate the authorization URL, install the app in a workspace you control, and confirm Slack returns a code to your redirect URI.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "quote": "Redirecting a user to Slack can be done with a single link."
+    },
+    {
+      "owner": "wait",
+      "title": "Slack Marketplace review",
+      "detail": "If you want public distribution, submit the app, answer reviewer feedback, and resubmit until it is approved.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "quote": "up to 10 weeks for new submissions"
+    },
+    {
+      "owner": "you",
+      "title": "Publish and keep scopes in sync",
+      "detail": "After approval, publish when ready. If scopes or redirect URIs change, update the live app and resubmit.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/faq/",
+      "quote": "you'll need your app to be reviewed again."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "You want Marketplace approval but have not reached 10 active workspaces.",
+      "whatToDo": "Get the app installed and tested on 10 or more active workspaces before submitting.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "quote": "installed on 10 or more active workspaces"
+    },
+    {
+      "problem": "You request restricted or broad scopes for a Marketplace app.",
+      "whatToDo": "Trim the scope list to the minimum and avoid restricted scopes before submitting again.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "quote": "identity.*, workflow.steps:execute, read, post, client, admin.*, search:read, triggers:*"
+    },
+    {
+      "problem": "Your app needs bulk channel-history reads and is not Marketplace-approved.",
+      "whatToDo": "Expect tighter limits on conversations.history and conversations.replies, or redesign around safer APIs.",
+      "status": "sourced",
+      "sourceUrl": "https://api.slack.com/changelog/2025-05-terms-rate-limit-update-and-faq",
+      "quote": "will be limited to 1 request per minute"
+    },
+    {
+      "problem": "You are trying to use the old classic app model.",
+      "whatToDo": "Use the v2 OAuth flow for a Slack app instead.",
+      "status": "sourced",
+      "sourceUrl": "https://api.slack.com/docs/oauth",
+      "quote": "You won't be able to create new classic apps"
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "Connect your Slack workspace so the AI agent can read the user-approved context, answer in Slack, and carry out approved actions."
+    },
+    {
+      "title": "Why we need chat:write",
+      "text": "Needed so the agent can send approved replies, summaries, and status updates back into Slack."
+    },
+    {
+      "title": "Why we need conversation history scopes",
+      "text": "Needed so the agent can read the recent Slack context it was explicitly allowed to access before it answers."
+    },
+    {
+      "title": "Why we need read scopes for conversations",
+      "text": "Needed to list available channels and direct messages so the user can choose where the agent should work."
+    },
+    {
+      "title": "Why we need users:read",
+      "text": "Needed to resolve user names and mentions so the agent can attribute messages correctly."
+    }
+  ],
+  "openQuestions": [
+    "I did not confirm a separate business-verification step for ordinary Slack OAuth apps.",
+    "I did not find a fixed Slack test-user cap for private installs beyond the workspace app limits and Marketplace requirements.",
+    "Exact scopes depend on what your agent does, so I left the scope list generic."
+  ],
+  "slug": "slack",
+  "generatedAt": "2026-10-29T07:33:37.954Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "SLACK",
+    "name": "Slack",
+    "checkedAt": "2026-10-29T07:31:51.086Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "up to 10 weeks for new submissions",
+          "found": true
+        },
+        {
+          "quote": "installed on 10 or more active workspaces",
+          "found": true
+        },
+        {
+          "quote": "identity.*, workflow.steps:execute, read, post, client, admin.*, search:read, triggers:*",
+          "found": false
+        },
+        {
+          "quote": "up to 10 weeks for new submissions",
+          "found": true
+        },
+        {
+          "quote": "installed on 10 or more active workspaces",
+          "found": true
+        },
+        {
+          "quote": "identity.*, workflow.steps:execute, read, post, client, admin.*, search:read, triggers:*",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://slack.com/terms-of-service/slack-developer-program",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "We currently provide the Developer Services at no charge.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://slack.com/pricing/free",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Up to 10 apps",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://api.slack.com/authentication/postman",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "A Slack workspace with privileges to install apps.",
+          "found": true
+        },
+        {
+          "quote": "Choose From Scratch and give your app a name and workspace to live on.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.slack.dev/authentication/installing-with-oauth/",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The `redirect_uri` must use HTTPS.",
+          "found": false
+        },
+        {
+          "quote": "The `redirect_uri` must use HTTPS.",
+          "found": false
+        },
+        {
+          "quote": "The `scope` list requests scopes for your app's bot user.",
+          "found": false
+        },
+        {
+          "quote": "Redirecting a user to Slack can be done with a single link.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.slack.dev/faq/",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "If you don't submit your app, we won't display it there",
+          "found": true
+        },
+        {
+          "quote": "you'll need your app to be reviewed again.",
+          "found": true
+        },
+        {
+          "quote": "If you don't submit your app, we won't display it there",
+          "found": true
+        },
+        {
+          "quote": "you'll need your app to be reviewed again.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://api.slack.com/changelog/2025-05-terms-rate-limit-update-and-faq",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "will be limited to 1 request per minute",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://api.slack.com/docs/oauth",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You won't be able to create new classic apps",
+          "found": false
+        }
+      ]
+    }
+  ]
+}

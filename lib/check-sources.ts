@@ -1,14 +1,19 @@
 import type { GuideDraft, SourceCheck } from "./schema";
 import { allCited } from "./evidence";
 
+// Quotes come back with markdown marks (`code`, **bold**) that the page text does not have.
+// Dashes of every width count as one plain hyphen on both sides.
 const squash = (s: string) =>
-  s.toLowerCase().replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
+  s.toLowerCase().replace(/[`*]/g, "").replace(/[\u2010-\u2015]/g, "-").replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
     .replace(/\s+/g, " ").trim();
 
 function pageText(html: string): string {
   return squash(
     html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<style[\s\S]*?<\/style>/gi, " ")
       .replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&")
+      .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+      .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+      .replace(/&[mn]dash;/g, "-").replace(/&[lr]squo;/g, "'").replace(/&[lr]dquo;/g, '"')
       .replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
   );
 }
@@ -38,7 +43,8 @@ export async function checkSources(g: GuideDraft): Promise<{ guide: GuideDraft; 
     const quotes = cited.filter((c) => c.sourceUrl === url && c.quote).map((c) => ({
       quote: c.quote!,
       // Long quotes often get trimmed or reflowed; the first 80 characters are enough.
-      found: p.ok && p.text.includes(squash(c.quote!).slice(0, 80)),
+      // A trailing full stop is often added by the model, so it is ignored.
+      found: p.ok && p.text.includes(squash(c.quote!).replace(/[.;:,]+$/, "").slice(0, 80)),
     }));
     return { url, ok: p.ok, httpStatus: p.status, quotes };
   });

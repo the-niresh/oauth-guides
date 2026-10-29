@@ -1,0 +1,19 @@
+{
+  "checkedBy": "Niresh (checked with Claude Code)",
+  "tested": [],
+  "corrections": [
+    {
+      "agentSaid": "Difficulty hard: The basic OAuth flow is quick, but an agent that reads and writes in Slack usually needs history scopes and sometimes file access, which triggers enhanced review. If you want a public Marketplace listing, Slack uses a multi-stage review that can take up to 10 weeks for new submissions.",
+      "actually": "Difficulty medium. You do not need the Marketplace to share a Slack app. The real problem for an agent is the rate limit on reading history for apps outside the Marketplace, which the agent missed in both runs. Added it as the first blocker.",
+      "source": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps"
+    },
+    {
+      "agentSaid": "Time until any user can connect: Up to 10 business days for preliminary feedback, then up to 10 weeks for functional review on a new Marketplace submission.",
+      "actually": "Same day. Public distribution lets any workspace install the app without the Marketplace. The 10 weeks applies only to a Marketplace listing.",
+      "source": "https://docs.slack.dev/app-management/distribution/"
+    }
+  ],
+  "notes": [
+    "Run 1 and run 2 both missed the May 2025 rate limit change. It is in Slack's changelog, not in the OAuth pages the agent read."
+  ]
+}

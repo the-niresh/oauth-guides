@@ -1,0 +1,313 @@
+{
+  "app": "X",
+  "website": "https://developer.x.com",
+  "developerPortalUrl": "https://console.x.com",
+  "summary": "Set up an X developer app in the Developer Console, enable OAuth 2.0, add the Composio redirect URI, and request the read/write scopes your agent needs. The main catch is that callback URLs must match exactly and AI reply bots need prior written approval from X.",
+  "difficulty": "medium",
+  "difficultyReason": "Basic user OAuth is mostly self-serve, but X has exact-match redirect URI rules, paid usage credits, an approved-app prerequisite for user-context endpoints, and explicit approval for AI reply bots.",
+  "timeToFirstLogin": {
+    "text": "15 to 30 minutes",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day for basic OAuth; longer if your use case needs X approval.",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [
+    {
+      "text": "X uses pay-per-use credits instead of fixed monthly fees.",
+      "status": "sourced",
+      "sourceUrl": "https://developer.x.com/?lang=en",
+      "quote": "No fixed monthly costs — pay only for what you use."
+    },
+    {
+      "text": "The new Developer Console is where you buy credits and watch usage.",
+      "status": "sourced",
+      "sourceUrl": "https://developer.x.com/?lang=en",
+      "quote": "Purchase credits, get quick-started with apps, and monitor consumption in real-time — all from the new Developer Console."
+    }
+  ],
+  "requirements": [
+    {
+      "text": "You need a developer account with an approved app before using user-context endpoints.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/lists/manage-lists/quickstart",
+      "quote": "A developer account with an approved App"
+    },
+    {
+      "text": "Enable OAuth 2.0 in the app’s authentication settings.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "To enable OAuth 2.0 in your App, you must enable it in your App’s authentication settings found in the App settings section of the Developer Console."
+    },
+    {
+      "text": "Use a redirect URI that matches exactly what you register in X.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)."
+    },
+    {
+      "text": "For a server-side agent, choose a confidential client app type.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "Native App and Single page Apps are public clients and Web App and Automated App or bots are confidential clients."
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "If the agent is an AI reply bot, X requires prior written and explicit approval.",
+      "status": "unsure",
+      "sourceUrl": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
+      "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X."
+    },
+    {
+      "text": "Advertisers, publishers, and brands using auto-response campaigns must request approval from X.",
+      "status": "unsure",
+      "sourceUrl": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
+      "quote": "Advertisers, publishers, and brands using auto-response campaigns must request approval from X."
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Create the app",
+      "detail": "Open console.x.com, sign in, click Create App, and enter the app name, description, and use case.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "Click Create App"
+    },
+    {
+      "owner": "you",
+      "title": "Choose the app type",
+      "detail": "Pick Web App or Automated App / Bot for a server-side agent. Use Native App or Single Page App only if you cannot safely store a secret.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "Confidential clients receive a Client Secret. Public clients use PKCE only."
+    },
+    {
+      "owner": "you",
+      "title": "Enable OAuth 2.0",
+      "detail": "Turn on OAuth 2.0 in the app settings. X says OAuth 2.0 is for X API v2 user-context endpoints.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "OAuth 2.0 can be used with the X API v2 only."
+    },
+    {
+      "owner": "you",
+      "title": "Add the redirect URI",
+      "detail": "Paste the exact Composio callback URL into X’s callback URL allowlist. Match it exactly, including trailing slashes; use https in production and 127.0.0.1 for local testing.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)."
+    },
+    {
+      "owner": "you",
+      "title": "Request the scopes you need",
+      "detail": "For a read/write agent, start with tweet.read, users.read, tweet.write, and offline.access. Add follows.read/write, like.read/write, list.read/write, bookmark.read/write, dm.read/write, and media.write only if your product actually needs those features.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "Scopes allow you to set granular access for your App so that your App only has the permissions that it needs."
+    },
+    {
+      "owner": "agent",
+      "title": "Send users through the authorize flow",
+      "detail": "Build the authorize URL, send the user to X, then exchange the returned code at https://api.x.com/2/oauth2/token. For confidential clients, use the Basic auth header; for public clients, include client_id and code_verifier.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/user-access-token",
+      "quote": "You will need to pass in the `Content-Type` of `application/x-www-form-urlencoded` via a header. Additionally, you should have in your request: `code`, `grant_type`, `client_id` and `redirect_uri`, and the `code_verifier`."
+    },
+    {
+      "owner": "wait",
+      "title": "Wait for X approval if your use case is an AI reply bot",
+      "detail": "Do not launch dynamic, context-aware automated replies until X gives written approval.",
+      "status": "unsure",
+      "sourceUrl": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
+      "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X."
+    },
+    {
+      "owner": "you",
+      "title": "Set up refresh tokens",
+      "detail": "If you want long-lived access, include offline.access so X issues a refresh token. Without it, the access token expires after two hours.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "By default, the access token you create through the Authorization Code Flow with PKCE will only stay valid for two hours unless you’ve used the `offline.access` scope."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "Redirect URI mismatch",
+      "whatToDo": "Copy the Composio callback URL exactly into X, including the trailing slash. Use 127.0.0.1 only for local development.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)."
+    },
+    {
+      "problem": "AI reply bot not approved",
+      "whatToDo": "Do not ship automated AI replies until X gives written approval.",
+      "status": "unsure",
+      "sourceUrl": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
+      "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X."
+    },
+    {
+      "problem": "No offline.access scope",
+      "whatToDo": "Expect the access token to expire after two hours and refresh it with the token endpoint.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "By default, the access token you create through the Authorization Code Flow with PKCE will only stay valid for two hours unless you’ve used the `offline.access` scope."
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description for X",
+      "text": "An AI assistant that lets users connect their X account so it can read posts and users, manage bookmarks and lists, post updates, reply to mentions, and send direct messages on the user’s behalf after explicit user consent. We request only the scopes needed for the features the user turns on."
+    },
+    {
+      "title": "Why we need write scopes",
+      "text": "The product acts on behalf of the user, so it needs write scopes for posting, replying, following, list management, bookmarks, and direct messages. Read scopes are required to fetch the user’s timeline, protected posts they can view, user data, and other account state needed to complete the requested action."
+    },
+    {
+      "title": "AI reply bot review note",
+      "text": "This app may generate dynamic, context-aware replies. We will clearly disclose the automation, obtain express user consent before taking actions, and honor opt-out requests immediately."
+    }
+  ],
+  "openQuestions": [
+    "Does your specific automation pattern count as an AI reply bot or auto-response campaign under X’s review rules?",
+    "Do you need DM, follow, like, list, bookmark, or media scopes, or only post/read scopes?",
+    "Will X require any extra approval for your exact app beyond the published approved-app prerequisite?",
+    "What is the actual approval turnaround time for your case?"
+  ],
+  "slug": "x",
+  "generatedAt": "2026-10-29T07:36:52.784Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "bring_your_own",
+    "slug": "TWITTER",
+    "name": "Twitter",
+    "checkedAt": "2026-10-29T07:35:12.905Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://developer.x.com/?lang=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "No fixed monthly costs — pay only for what you use.",
+          "found": false
+        },
+        {
+          "quote": "Purchase credits, get quick-started with apps, and monitor consumption in real-time — all from the new Developer Console.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/x-api/lists/manage-lists/quickstart",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "A developer account with an approved App",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "To enable OAuth 2.0 in your App, you must enable it in your App’s authentication settings found in the App settings section of the Developer Console.",
+          "found": true
+        },
+        {
+          "quote": "OAuth 2.0 can be used with the X API v2 only.",
+          "found": true
+        },
+        {
+          "quote": "Scopes allow you to set granular access for your App so that your App only has the permissions that it needs.",
+          "found": true
+        },
+        {
+          "quote": "By default, the access token you create through the Authorization Code Flow with PKCE will only stay valid for two hours unless you’ve used the `offline.access` scope.",
+          "found": true
+        },
+        {
+          "quote": "By default, the access token you create through the Authorization Code Flow with PKCE will only stay valid for two hours unless you’ve used the `offline.access` scope.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/fundamentals/developer-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "URLs must match exactly (including trailing slashes).",
+          "found": true
+        },
+        {
+          "quote": "Native App and Single page Apps are public clients and Web App and Automated App or bots are confidential clients.",
+          "found": false
+        },
+        {
+          "quote": "Click Create App",
+          "found": true
+        },
+        {
+          "quote": "Confidential clients receive a Client Secret. Public clients use PKCE only.",
+          "found": true
+        },
+        {
+          "quote": "URLs must match exactly (including trailing slashes).",
+          "found": true
+        },
+        {
+          "quote": "URLs must match exactly (including trailing slashes).",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
+      "ok": false,
+      "httpStatus": 403,
+      "quotes": [
+        {
+          "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X.",
+          "found": false
+        },
+        {
+          "quote": "Advertisers, publishers, and brands using auto-response campaigns must request approval from X.",
+          "found": false
+        },
+        {
+          "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X.",
+          "found": false
+        },
+        {
+          "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/fundamentals/authentication/oauth-2-0/user-access-token",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You will need to pass in the `Content-Type` of `application/x-www-form-urlencoded` via a header. Additionally, you should have in your request: `code`, `grant_type`, `client_id` and `redirect_uri`, and the `code_verifier`.",
+          "found": true
+        }
+      ]
+    }
+  ],
+  "checkedAt": "2026-10-29T07:39:54.404Z"
+}

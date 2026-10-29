@@ -1,0 +1,324 @@
+{
+  "app": "GitHub",
+  "website": "https://github.com",
+  "developerPortalUrl": "https://github.com/settings/developers",
+  "summary": "GitHub OAuth setup is self-serve: create an OAuth app in Developer settings, paste the Composio callback URL, and request the scopes your agent actually needs. GitHub recommends GitHub Apps in general, and the main catch is that organizations with OAuth app access restrictions may require owner approval before users can connect.",
+  "difficulty": "medium",
+  "difficultyReason": "The setup itself is quick, but real use can hit organization-owner approval, verified-email requirements, and OAuth token/rate limits.",
+  "timeToFirstLogin": {
+    "text": "15 to 30 minutes",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day in the common case; a few days if an org owner has to review access",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [],
+  "requirements": [
+    {
+      "text": "Create the app under a personal account or an organization where you have admin access.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "You can create and register an OAuth app under your personal account or under any organization you have administrative access to."
+    },
+    {
+      "text": "Keep the app name, homepage, and description public; do not put sensitive internal URLs in the app registration.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "Only use information in your OAuth app that you consider public."
+    },
+    {
+      "text": "Paste the Composio redirect URI into Authorization callback URL.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "In \"Authorization callback URL\", type the callback URL of your app."
+    },
+    {
+      "text": "You can register multiple callback URLs if you need them.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "You can enter up to 10 callback URLs."
+    },
+    {
+      "text": "Make sure the redirect URI matches exactly unless you deliberately enable wildcard matching.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "quote": "When wildcard matching is disabled, the redirect URL must exactly match the callback URL."
+    },
+    {
+      "text": "Choose the smallest scope set that covers your use case; GitHub shows the requested scopes on the consent screen.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "When setting up an OAuth app on GitHub, requested scopes are displayed to the user on the authorization form."
+    },
+    {
+      "text": "Use `read:user` if you only need profile data.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "`read:user`  | Grants access to read a user's profile data."
+    },
+    {
+      "text": "Use `user:email` if you need the user's email addresses.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "`user:email`  | Grants read access to a user's email addresses."
+    },
+    {
+      "text": "Use `public_repo` for public repositories, or `repo` if you need private repositories too.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "`public_repo`  | Limits access to public repositories."
+    },
+    {
+      "text": "If the user's GitHub email is not verified, they cannot authorize the app.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+      "quote": "You must verify your email address before you can authorize an OAuth app."
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "If an organization has OAuth app access restrictions enabled, an owner must approve access before members or outside collaborators can authorize the app for organization resources.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/about-oauth-app-access-restrictions",
+      "quote": "When OAuth app access restrictions are enabled, organization members and outside collaborators cannot authorize OAuth app access to organization resources."
+    }
+  ],
+  "steps": [
+    {
+      "owner": "agent",
+      "title": "Draft public app copy",
+      "detail": "Write the app name, homepage, and short description. Keep it public and user-facing.",
+      "status": "unsure",
+      "sourceUrl": null,
+      "quote": null
+    },
+    {
+      "owner": "you",
+      "title": "Create the OAuth app in GitHub",
+      "detail": "Go to GitHub > profile picture > Settings > Developer settings > OAuth apps > New OAuth App.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "Click New OAuth App."
+    },
+    {
+      "owner": "you",
+      "title": "Fill in the registration form",
+      "detail": "Enter Application name, Homepage URL, optional Description, and the Composio Authorization callback URL.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "In \"Homepage URL\", type the full URL to your app's website."
+    },
+    {
+      "owner": "you",
+      "title": "Save the app and copy credentials",
+      "detail": "Register the app, then copy the Client ID and Client Secret into your integration config.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "quote": "The client secret you received from GitHub for your OAuth app."
+    },
+    {
+      "owner": "agent",
+      "title": "Build the OAuth flow",
+      "detail": "Send users to GitHub with the client_id and requested scopes, then exchange the code for a token and store it safely.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "quote": "GitHub's OAuth implementation supports the standard authorization code grant type and the OAuth 2.0 Device Authorization Grant for apps that don't have access to a web browser."
+    },
+    {
+      "owner": "you",
+      "title": "Test with a verified GitHub account",
+      "detail": "Authorize the app with a GitHub account whose email is verified and confirm the scopes shown on the consent screen.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+      "quote": "You must verify your email address before you can authorize an OAuth app."
+    },
+    {
+      "owner": "wait",
+      "title": "Wait for org-owner approval if needed",
+      "detail": "If the target organization restricts OAuth apps, an owner must review and grant access before org resources work.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "quote": "organization owners can approve or deny the request."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "GitHub email is not verified.",
+      "whatToDo": "Verify the account email, then retry authorization.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+      "quote": "You must verify your email address before you can authorize an OAuth app."
+    },
+    {
+      "problem": "GitHub flags the account as restricted or under review.",
+      "whatToDo": "Follow GitHub Appeal and Reinstatement; retrying the flow will not fix it while the restriction remains.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+      "quote": "This account is flagged, and therefore cannot authorize a third party application"
+    },
+    {
+      "problem": "An organization has OAuth app access restrictions enabled.",
+      "whatToDo": "Have an organization owner approve the app in Settings > OAuth app policy, then reauthorize.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "quote": "When OAuth app access restrictions are enabled, organization members and outside collaborators must request approval from an organization owner before they can authorize an OAuth app that has access to the organization's resources."
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "Public app description",
+      "text": "This app lets an AI agent connect to a user's GitHub account and perform only user-approved actions such as reading repositories, creating issues, opening pull requests, and updating repository data."
+    },
+    {
+      "title": "Identity scope justification",
+      "text": "We need `read:user` and `user:email` to identify the connected GitHub account, show the right user in the app, and map the GitHub identity to the user's workspace."
+    },
+    {
+      "title": "Repository scope justification",
+      "text": "We need `public_repo` or `repo` only if the agent must list repositories, read repository content, and create or update issues, pull requests, or files on the user's behalf."
+    }
+  ],
+  "openQuestions": [
+    "I did not confirm the exact GitHub scopes your Composio workflow needs, so the final scope set should be minimized to your actions.",
+    "I did not find a GitHub-wide app verification program for standard OAuth apps in the official docs I checked; the documented approval gate is organization-owner approval when org OAuth restrictions are enabled.",
+    "I did not confirm whether your integration will use web flow or device flow; Composio's dashboard decides the redirect URI and your app flow should match it."
+  ],
+  "slug": "github",
+  "generatedAt": "2026-10-29T07:31:43.375Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "GITHUB",
+    "name": "GitHub",
+    "checkedAt": "2026-10-29T07:30:10.763Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You can create and register an OAuth app under your personal account or under any organization you have administrative access to.",
+          "found": true
+        },
+        {
+          "quote": "Only use information in your OAuth app that you consider public.",
+          "found": true
+        },
+        {
+          "quote": "In \"Authorization callback URL\", type the callback URL of your app.",
+          "found": true
+        },
+        {
+          "quote": "You can enter up to 10 callback URLs.",
+          "found": true
+        },
+        {
+          "quote": "Click New OAuth App.",
+          "found": false
+        },
+        {
+          "quote": "In \"Homepage URL\", type the full URL to your app's website.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "When wildcard matching is disabled, the redirect URL must exactly match the callback URL.",
+          "found": true
+        },
+        {
+          "quote": "The client secret you received from GitHub for your OAuth app.",
+          "found": true
+        },
+        {
+          "quote": "GitHub's OAuth implementation supports the standard authorization code grant type and the OAuth 2.0 Device Authorization Grant for apps that don't have access to a web browser.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "When setting up an OAuth app on GitHub, requested scopes are displayed to the user on the authorization form.",
+          "found": true
+        },
+        {
+          "quote": "`read:user`  | Grants access to read a user's profile data.",
+          "found": false
+        },
+        {
+          "quote": "`user:email`  | Grants read access to a user's email addresses.",
+          "found": false
+        },
+        {
+          "quote": "`public_repo`  | Limits access to public repositories.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/using-oauth-apps/authorizing-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You must verify your email address before you can authorize an OAuth app.",
+          "found": true
+        },
+        {
+          "quote": "You must verify your email address before you can authorize an OAuth app.",
+          "found": true
+        },
+        {
+          "quote": "You must verify your email address before you can authorize an OAuth app.",
+          "found": true
+        },
+        {
+          "quote": "This account is flagged, and therefore cannot authorize a third party application",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/about-oauth-app-access-restrictions",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "When OAuth app access restrictions are enabled, organization members and outside collaborators cannot authorize OAuth app access to organization resources.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "organization owners can approve or deny the request.",
+          "found": true
+        },
+        {
+          "quote": "When OAuth app access restrictions are enabled, organization members and outside collaborators must request approval from an organization owner before they can authorize an OAuth app that has access to the organization's resources.",
+          "found": true
+        }
+      ]
+    }
+  ]
+}

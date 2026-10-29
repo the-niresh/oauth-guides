@@ -1,0 +1,387 @@
+{
+  "app": "Gmail",
+  "website": "Gmail API",
+  "developerPortalUrl": null,
+  "summary": "Setup is a Google Cloud project, Gmail API enablement, an OAuth consent screen, a Web application OAuth client, and the exact redirect URI. The catch is that Gmail read/write scopes are restricted, so real users usually hit verification and testing limits.",
+  "difficulty": "hard",
+  "difficultyReason": "Gmail read/write scopes are restricted, and Google says restricted-scope verification can take about 6 weeks; if your app can access restricted Gmail data from or through a server, Google also requires an annual security assessment.",
+  "timeToFirstLogin": {
+    "text": "under an hour",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "about 6 weeks",
+    "status": "sourced",
+    "sourceUrl": "https://support.google.com/cloud/answer/13463817?hl=en",
+    "quote": "6 weeks"
+  },
+  "costs": [
+    {
+      "text": "Standard Gmail API use has no additional cost.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/reference/quota",
+      "quote": "no additional cost"
+    }
+  ],
+  "requirements": [
+    {
+      "text": "Create or select a Google Cloud project and enable the Gmail API.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/quickstart/python",
+      "quote": "enable the Gmail API."
+    },
+    {
+      "text": "Configure the OAuth consent screen before you create client credentials.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "quote": "The OAuth Consent Screen tells users which app is requesting access to their data"
+    },
+    {
+      "text": "If your users are outside your Google Workspace organization, set user type to External.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "quote": "available to any user with a Google Account."
+    },
+    {
+      "text": "Add authorized domains for your home page, privacy policy, terms of service, redirect URIs, and JavaScript origins.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/production-readiness/policy-compliance",
+      "quote": "verification of all domains associated"
+    },
+    {
+      "text": "Link a privacy policy from the OAuth consent screen.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549049?hl=en",
+      "quote": "The Privacy Policy must be linked"
+    },
+    {
+      "text": "Create a Web application OAuth client and register redirect URIs that exactly match your callback.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "must exactly match"
+    },
+    {
+      "text": "If you keep the app in Testing, add each tester as a test user.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "limited to up to 100 test users"
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "Requesting gmail.send is sensitive. The main read/write Gmail scopes are restricted, including gmail.readonly, gmail.compose, gmail.insert, gmail.modify, gmail.metadata, gmail.settings.basic, gmail.settings.sharing, and mail.google.com.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "quote": "Read, compose, and send emails from your Gmail account."
+    },
+    {
+      "text": "If your app can access restricted Gmail data from or through a server, Google requires an annual security assessment.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "quote": "annual security assessment"
+    },
+    {
+      "text": "External apps in Testing are capped at 100 test users, and test authorizations expire after 7 days.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "expire seven days from the time of consent."
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Choose the smallest scope set",
+      "detail": "For a Gmail agent that reads and writes mail, start with gmail.modify. Add gmail.send only if you want a separate send-only path. Do not request mail.google.com unless you truly need permanent delete or IMAP or SMTP style full access.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "quote": "Read, compose, and send emails from your Gmail account."
+    },
+    {
+      "owner": "you",
+      "title": "Create a Google Cloud project",
+      "detail": "Create or select the project that will own the OAuth app and Gmail API credentials.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "quote": "it must have a corresponding Google Cloud project"
+    },
+    {
+      "owner": "you",
+      "title": "Enable the Gmail API",
+      "detail": "In Google Cloud Console, open API Library and enable the Gmail API for the project.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/quickstart/python",
+      "quote": "enable the Gmail API."
+    },
+    {
+      "owner": "you",
+      "title": "Configure OAuth consent screen",
+      "detail": "Set app name, support email, user type, privacy policy, terms, authorized domains, and the scopes you will request. Add test users if you stay in Testing.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "quote": "The OAuth Consent Screen tells users which app is requesting access to their data"
+    },
+    {
+      "owner": "you",
+      "title": "Create OAuth client credentials",
+      "detail": "Create an OAuth client ID as a Web application. Put the exact redirect URI from your Composio auth config into the Google client settings, and add any authorized JavaScript origins if your app needs them.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "must exactly match"
+    },
+    {
+      "owner": "you",
+      "title": "Test with listed users only",
+      "detail": "Keep the app in Testing while you verify the flow. Add each tester to the test users list first, and remember that testing authorizations expire after 7 days.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "expire seven days from the time of consent."
+    },
+    {
+      "owner": "wait",
+      "title": "Submit for verification",
+      "detail": "Move the app to production, then submit the consent screen for branding verification and the required scope verification. If the app can access restricted Gmail data from or through a server, expect a security assessment step.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "quote": "Submit for Verification"
+    },
+    {
+      "owner": "wait",
+      "title": "Wait for approval",
+      "detail": "Google reviews branding, scopes, and any security assessment work before real users can connect.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13463817?hl=en",
+      "quote": "6 weeks"
+    },
+    {
+      "owner": "you",
+      "title": "Publish and onboard real users",
+      "detail": "After approval, switch the app to production and let real Gmail users connect with the approved scopes.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "In Production"
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "If your redirect URI does not match exactly, Google returns redirect_uri_mismatch.",
+      "whatToDo": "Copy the exact redirect URI from Composio into the Google OAuth client and keep the scheme, host, port, and path identical.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "redirect_uri_mismatch"
+    },
+    {
+      "problem": "Testing mode only allows a small tester set and the authorization expires after 7 days.",
+      "whatToDo": "Use Testing only for development, then move to production before onboarding real users.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "limited to up to 100 test users"
+    },
+    {
+      "problem": "Unapproved sensitive or restricted scopes can show the unverified app screen and exhaust the user cap.",
+      "whatToDo": "Submit the exact scopes you need for verification before you ask real users to connect.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13463817?hl=en",
+      "quote": "100 new-user cap"
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "Our app is an AI assistant that reads a user's Gmail, drafts replies, sends messages they approve, and updates mail state on their behalf."
+    },
+    {
+      "title": "gmail.modify justification",
+      "text": "We request gmail.modify because the agent must read messages, compose drafts, and send mail inside Gmail for the user."
+    },
+    {
+      "title": "gmail.send justification",
+      "text": "We request gmail.send only if we need a separate send-only path or want the narrowest possible sending scope."
+    }
+  ],
+  "openQuestions": [
+    "What exact redirect URI does Composio show in your auth config?",
+    "Do you need only inbox read and write, or also labels, filters, or other Gmail settings?",
+    "Will your app store or transmit Gmail data from its servers, which decides whether a security assessment applies?",
+    "Are you building for consumer Gmail users outside your organization, or only for a Google Workspace internal audience?"
+  ],
+  "slug": "gmail",
+  "generatedAt": "2026-10-29T07:37:23.326Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "GMAIL",
+    "name": "Gmail",
+    "checkedAt": "2026-10-29T07:35:12.898Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://support.google.com/cloud/answer/13463817?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "6 weeks",
+          "found": true
+        },
+        {
+          "quote": "6 weeks",
+          "found": true
+        },
+        {
+          "quote": "100 new-user cap",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/reference/quota",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "no additional cost",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/quickstart/python",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "enable the Gmail API.",
+          "found": true
+        },
+        {
+          "quote": "enable the Gmail API.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/13461325?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The OAuth Consent Screen tells users which app is requesting access to their data",
+          "found": true
+        },
+        {
+          "quote": "available to any user with a Google Account.",
+          "found": true
+        },
+        {
+          "quote": "it must have a corresponding Google Cloud project",
+          "found": true
+        },
+        {
+          "quote": "The OAuth Consent Screen tells users which app is requesting access to their data",
+          "found": true
+        },
+        {
+          "quote": "Submit for Verification",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/policy-compliance",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "verification of all domains associated",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/15549049?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The Privacy Policy must be linked",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "must exactly match",
+          "found": true
+        },
+        {
+          "quote": "must exactly match",
+          "found": true
+        },
+        {
+          "quote": "redirect_uri_mismatch",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "limited to up to 100 test users",
+          "found": true
+        },
+        {
+          "quote": "expire seven days from the time of consent.",
+          "found": true
+        },
+        {
+          "quote": "expire seven days from the time of consent.",
+          "found": true
+        },
+        {
+          "quote": "In Production",
+          "found": true
+        },
+        {
+          "quote": "limited to up to 100 test users",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Read, compose, and send emails from your Gmail account.",
+          "found": true
+        },
+        {
+          "quote": "Read, compose, and send emails from your Gmail account.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "annual security assessment",
+          "found": true
+        }
+      ]
+    }
+  ],
+  "checkedAt": "2026-10-29T07:39:57.628Z"
+}

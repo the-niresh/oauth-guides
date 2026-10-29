@@ -1,0 +1,9 @@
+{
+  "checkedBy": "Niresh (checked with Claude Code)",
+  "tested": [],
+  "corrections": [],
+  "notes": [
+    "Checked by hand: Share on LinkedIn (w_member_social) is an open permission. LinkedIn says these are available to all developers without special approval.",
+    "Run 1 only covered sign in. Run 2 covered posting after the instructions asked for the read and write scopes an agent needs."
+  ]
+}

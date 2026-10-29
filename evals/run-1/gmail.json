@@ -1,0 +1,396 @@
+{
+  "app": "Gmail",
+  "website": "https://workspace.google.com/products/gmail/",
+  "developerPortalUrl": "https://console.cloud.google.com/",
+  "summary": "Create a Google Cloud project, configure the OAuth consent screen, choose the minimum Gmail scopes, and create an OAuth client with a valid redirect URI. The main catch is that most useful Gmail scopes are sensitive or restricted, so external production apps need verification and some restricted scopes also require a security assessment. ([developers.google.com](https://developers.google.com/workspace/gmail/api/auth/web-server))",
+  "difficulty": "hard",
+  "difficultyReason": "Gmail setup is self-serve, but production access is not trivial because sensitive/restricted scopes trigger Google verification, and restricted scopes can require a security assessment. ([support.google.com](https://support.google.com/cloud/answer/13463073?hl=en))",
+  "timeToFirstLogin": {
+    "text": "Same day to a few hours in testing, once the project, client, and test user are in place. (Estimate)",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "A few days to several weeks if Google requires brand verification or restricted-scope review; longer if a security assessment is needed. (Estimate)",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [
+    {
+      "text": "Standard Gmail API use has no direct Google API fee.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/reference/quota",
+      "quote": "All standard use of the Gmail API is available at no additional cost."
+    },
+    {
+      "text": "If you exceed quota request limits later in 2026, Google says charges will be added to your Google Cloud bill; quota increase requests will also require Google Cloud billing to be enabled.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/tools-safety",
+      "quote": "API usage over standard daily thresholds will generate charges on your Google Cloud bill."
+    },
+    {
+      "text": "If you need a restricted-scope security assessment, the third-party assessor fee is not published by Google and will depend on the assessor.",
+      "status": "unsure",
+      "sourceUrl": null,
+      "quote": null
+    }
+  ],
+  "requirements": [
+    {
+      "text": "Create a Google Cloud project and enable the Gmail API.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+      "quote": "creating a project in the Google API Console and enabling the API."
+    },
+    {
+      "text": "Configure the OAuth consent screen with app name, support email, and contact email.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/guides/configure-oauth-consent",
+      "quote": "All apps using OAuth 2.0 require a consent screen configuration"
+    },
+    {
+      "text": "Verify your authorized domains, and keep your homepage and privacy policy on the same verified domain.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/verification/authentication-verification",
+      "quote": "Google requires verification of all domains"
+    },
+    {
+      "text": "Choose External for public users or Internal for a Google Workspace organization.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15544987?hl=en",
+      "quote": "available to any user with a Google Account."
+    },
+    {
+      "text": "Add only the minimum Gmail scopes you need.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "quote": "choose the most narrowly focused scope possible"
+    },
+    {
+      "text": "Register the OAuth redirect URI exactly as Google expects it, including scheme, host, and path.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "must exactly match one of the authorized redirect URIs"
+    },
+    {
+      "text": "Request offline access so you receive a refresh token and can keep the connection alive.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+      "quote": "it also receives a refresh token"
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "Any external production app that requests sensitive or restricted Gmail scopes must complete Google OAuth app verification.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13463073?hl=en",
+      "quote": "Apps that request access to scopes categorized as sensitive or restricted must complete Google's OAuth app verification before being granted access."
+    },
+    {
+      "text": "If you want your app name or logo shown on the consent screen, you need brand verification.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13463073?hl=en",
+      "quote": "you will need to complete a lighter-weight verification process known as brand-verification."
+    },
+    {
+      "text": "If the app accesses restricted Gmail data from or through a third-party server, Google requires an annual security assessment.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "quote": "undergoing an annual security assessment"
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Create the Google Cloud project",
+      "detail": "Open Google Cloud Console, create a project, and enable Gmail API.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+      "quote": "creating a project in the Google API Console and enabling the API."
+    },
+    {
+      "owner": "you",
+      "title": "Set up OAuth branding",
+      "detail": "Go to Google Auth Platform > Branding and fill in the app name, support email, and contact email.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/guides/configure-oauth-consent",
+      "quote": "In User support email, choose a support email address"
+    },
+    {
+      "owner": "you",
+      "title": "Verify your domains",
+      "detail": "Add your authorized domains and verify ownership in Google Search Console.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/verification/authentication-verification",
+      "quote": "Google requires verification of all domains"
+    },
+    {
+      "owner": "you",
+      "title": "Choose audience and test users",
+      "detail": "Set Audience to External or Internal. If External, add test users for development.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "available to any user with a Google Account."
+    },
+    {
+      "owner": "you",
+      "title": "Add Gmail scopes",
+      "detail": "Go to Data Access and add only the Gmail scopes your agent truly needs.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "quote": "choose the most narrowly focused scope possible"
+    },
+    {
+      "owner": "you",
+      "title": "Create the OAuth client",
+      "detail": "Go to Clients, create an OAuth client ID for a Web application, and register the exact redirect URI.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "must exactly match one of the authorized redirect URIs"
+    },
+    {
+      "owner": "you",
+      "title": "Implement offline access",
+      "detail": "Request offline access, exchange the code, and store the refresh token securely.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+      "quote": "it also receives a refresh token"
+    },
+    {
+      "owner": "wait",
+      "title": "Submit for verification",
+      "detail": "If you use sensitive or restricted Gmail scopes, submit verification and wait for Google review.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/13463073?hl=en",
+      "quote": "must complete Google's OAuth app verification before being granted access."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "Testing mode refresh tokens expire after 7 days.",
+      "whatToDo": "Use test users for development, but publish before production.",
+      "status": "sourced",
+      "sourceUrl": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "quote": "Authorizations by a test user will expire seven days from the time of consent."
+    },
+    {
+      "problem": "A redirect URI mismatch will break login.",
+      "whatToDo": "Copy the redirect URI exactly from your Composio auth config and register it verbatim in Google Cloud.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "quote": "must exactly match one of the authorized redirect URIs"
+    },
+    {
+      "problem": "Restricted Gmail scopes that touch data through your server need a security assessment.",
+      "whatToDo": "Plan time and budget for a Google-empanelled assessor before launch.",
+      "status": "sourced",
+      "sourceUrl": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "quote": "must go through a security assessment"
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "Our app is an AI assistant that connects to a user's Gmail account with explicit consent. It reads user-selected email content, drafts replies, and sends messages only when the user approves."
+    },
+    {
+      "title": "Why we need gmail.send",
+      "text": "We need gmail.send so the assistant can send user-approved replies, follow-ups, and notifications from the user's Gmail account."
+    },
+    {
+      "title": "Why we need gmail.readonly",
+      "text": "We need gmail.readonly so the assistant can inspect inbox threads, message content, and headers to summarize mail and draft accurate responses."
+    },
+    {
+      "title": "Why we need gmail.modify",
+      "text": "We need gmail.modify so the assistant can apply user-requested actions like archiving, labeling, or moving messages after the user confirms them."
+    }
+  ],
+  "openQuestions": [
+    "Do you need send-only access, or do you also need to read inbox content?",
+    "Will Gmail data be processed or stored on your server, which would make restricted-scope review and a security assessment more likely?",
+    "Is this an external public app, or only an internal Google Workspace app?"
+  ],
+  "slug": "gmail",
+  "generatedAt": "2026-10-29T07:33:55.737Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "GMAIL",
+    "name": "Gmail",
+    "checkedAt": "2026-10-29T07:31:51.066Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/reference/quota",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "All standard use of the Gmail API is available at no additional cost.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/tools-safety",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "API usage over standard daily thresholds will generate charges on your Google Cloud bill.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/auth/web-server",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "creating a project in the Google API Console and enabling the API.",
+          "found": true
+        },
+        {
+          "quote": "it also receives a refresh token",
+          "found": true
+        },
+        {
+          "quote": "creating a project in the Google API Console and enabling the API.",
+          "found": true
+        },
+        {
+          "quote": "it also receives a refresh token",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/guides/configure-oauth-consent",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "All apps using OAuth 2.0 require a consent screen configuration",
+          "found": true
+        },
+        {
+          "quote": "In User support email, choose a support email address",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/verification/authentication-verification",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Google requires verification of all domains",
+          "found": true
+        },
+        {
+          "quote": "Google requires verification of all domains",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/15544987?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "available to any user with a Google Account.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "choose the most narrowly focused scope possible",
+          "found": true
+        },
+        {
+          "quote": "choose the most narrowly focused scope possible",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/protocols/oauth2/web-server",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "must exactly match one of the authorized redirect URIs",
+          "found": true
+        },
+        {
+          "quote": "must exactly match one of the authorized redirect URIs",
+          "found": true
+        },
+        {
+          "quote": "must exactly match one of the authorized redirect URIs",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/13463073?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Apps that request access to scopes categorized as sensitive or restricted must complete Google's OAuth app verification before being granted access.",
+          "found": true
+        },
+        {
+          "quote": "you will need to complete a lighter-weight verification process known as brand-verification.",
+          "found": false
+        },
+        {
+          "quote": "must complete Google's OAuth app verification before being granted access.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "undergoing an annual security assessment",
+          "found": true
+        },
+        {
+          "quote": "must go through a security assessment",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://support.google.com/cloud/answer/15549945?hl=en",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "available to any user with a Google Account.",
+          "found": true
+        },
+        {
+          "quote": "Authorizations by a test user will expire seven days from the time of consent.",
+          "found": true
+        }
+      ]
+    }
+  ]
+}

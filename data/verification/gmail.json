@@ -1,0 +1,9 @@
+{
+  "checkedBy": "Niresh (checked with Claude Code)",
+  "tested": [],
+  "corrections": [],
+  "notes": [
+    "Checked by hand: the 100 user cap for unverified apps is on Google's unverified apps page, which says the cap cannot be reset or changed.",
+    "Run 1 missed the 100 user cap. Run 2 found it after the instructions asked for user caps on unreviewed apps."
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "app": "GitHub",
+  "website": "https://github.com",
+  "developerPortalUrl": "https://docs.github.com/en/apps/oauth-apps",
+  "summary": "GitHub OAuth app setup is self-serve: create the app in Developer settings, then request only the scopes your agent needs, usually `repo` plus `workflow` or webhook scopes when those features are required. The main catch is that OAuth scopes are coarse, and some organizations must approve OAuth apps before members can connect them.",
+  "difficulty": "easy",
+  "difficultyReason": "Anyone with a GitHub account can register an OAuth app in minutes and real users can connect right away. GitHub does not review OAuth apps. Two things can still slow you down: organizations that turn on OAuth app access restrictions must approve your app before it can see their data, and GitHub limits OAuth apps to 2,000 access token requests per hour.",
+  "timeToFirstLogin": {
+    "text": "15 to 30 minutes",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day for personal accounts; longer if an organization owner must approve access",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [],
+  "requirements": [
+    {
+      "text": "Create the OAuth app under a personal account or an organization you administer.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "You can create and register an OAuth app under your personal account or under any organization you have administrative access to."
+    },
+    {
+      "text": "Keep the registration data public.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "Only use information in your OAuth app that you consider public."
+    },
+    {
+      "text": "Use `repo` for repository read/write access.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
+      "quote": "OAuth apps need to request the repo scope"
+    },
+    {
+      "text": "Use `write:repo_hook` if you need webhook-driven repository triggers.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
+      "quote": "OAuth apps request the webhook scope"
+    },
+    {
+      "text": "Add `workflow` if the agent will create or update GitHub Actions workflow files.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "add and update GitHub Actions workflow files."
+    },
+    {
+      "text": "Add `offline_access` if you want refresh tokens for expiring access tokens.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "quote": "Requests an expiring access token and a refresh token"
+    },
+    {
+      "text": "Users must verify their primary email before authorizing.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/maintaining-oauth-apps/troubleshooting-oauth-app-access-token-request-errors",
+      "quote": "You must verify your email address before you can authorize an OAuth app."
+    }
+  ],
+  "reviewTriggers": [
+    {
+      "text": "If the target organization has OAuth app access restrictions enabled, an owner must approve access.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "quote": "organization members and outside collaborators must request approval from an organization owner"
+    },
+    {
+      "text": "If you publish the app in GitHub Marketplace, GitHub requires listing verification.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/github-marketplace/creating-apps-for-github-marketplace/requirements-for-listing-an-app",
+      "quote": "you must request verification for the app listing."
+    },
+    {
+      "text": "Paid OAuth app listings need at least 200 users.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/github-marketplace/creating-apps-for-github-marketplace/requirements-for-listing-an-app",
+      "quote": "OAuth apps should have a minimum of 200 users."
+    }
+  ],
+  "steps": [
+    {
+      "owner": "you",
+      "title": "Open Developer settings and start a new app",
+      "detail": "Go to GitHub Settings, then Developer settings > OAuth apps, and click New OAuth App.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "quote": "click your profile picture, then click Settings."
+    },
+    {
+      "owner": "you",
+      "title": "Set the callback URL",
+      "detail": "Paste the exact redirect URL you will use. Leave `redirect_uri` out unless you need to override the default callback.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "quote": "The `redirect_uri` parameter is optional."
+    },
+    {
+      "owner": "wait",
+      "title": "User authorizes the app",
+      "detail": "Send the user through GitHub's consent screen and exchange the returned code for a token.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "quote": "Once the user has authorized, the app will receive an access token"
+    },
+    {
+      "owner": "wait",
+      "title": "Get org owner approval when needed",
+      "detail": "If the target organization restricts OAuth apps, an owner has to review the request and grant access.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "quote": "organization members and outside collaborators must request approval from an organization owner"
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "The callback URL does not match GitHub's registered callback URL.",
+      "whatToDo": "Use the exact registered callback URL, or omit `redirect_uri` and let GitHub use the first saved callback URL.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/maintaining-oauth-apps/troubleshooting-oauth-app-access-token-request-errors",
+      "quote": "The redirect_uri MUST match the registered callback URL for this application."
+    },
+    {
+      "problem": "GitHub throttles token minting if the app keeps re-running authorization.",
+      "whatToDo": "Cache tokens and avoid re-running the OAuth flow on every request.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/rate-limits-for-oauth-apps",
+      "quote": "OAuth apps are subject to a rate limit of 2,000 access token requests per hour."
+    },
+    {
+      "problem": "Deleted access tokens do not clean up webhook subscriptions automatically.",
+      "whatToDo": "Plan a manual cleanup path for repository or organization webhooks when users disconnect the app.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
+      "quote": "Webhooks are not automatically disabled if an OAuth app's access token is deleted"
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "Connect your GitHub account so the AI agent can read repository data and perform authorized write actions like creating issues, pull requests, comments, and webhook-driven updates on your behalf."
+    },
+    {
+      "title": "Scope justification: repo",
+      "text": "Needed so the agent can read and write repository content, issues, pull requests, and other repo-owned data for the connected user."
+    },
+    {
+      "title": "Scope justification: webhook triggers",
+      "text": "Needed so GitHub can send repository events to the app instead of the agent polling for changes."
+    },
+    {
+      "title": "Scope justification: workflow",
+      "text": "Needed only if the agent will create or update GitHub Actions workflow files."
+    }
+  ],
+  "openQuestions": [
+    "Will the agent need organization membership or organization project access, or only repository access?",
+    "Do you want webhook-driven triggers, or is polling enough?",
+    "Will the app stay private, or do you want a GitHub Marketplace listing?",
+    "Do you need private email addresses from GitHub? If yes, add `user:email`."
+  ],
+  "slug": "github",
+  "generatedAt": "2026-10-29T07:39:10.721Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "managed",
+    "slug": "GITHUB",
+    "name": "GitHub",
+    "checkedAt": "2026-10-29T07:35:12.870Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You can create and register an OAuth app under your personal account or under any organization you have administrative access to.",
+          "found": true
+        },
+        {
+          "quote": "Only use information in your OAuth app that you consider public.",
+          "found": true
+        },
+        {
+          "quote": "click your profile picture, then click Settings.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "OAuth apps need to request the repo scope",
+          "found": true
+        },
+        {
+          "quote": "OAuth apps request the webhook scope",
+          "found": true
+        },
+        {
+          "quote": "Webhooks are not automatically disabled if an OAuth app's access token is deleted",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "add and update GitHub Actions workflow files.",
+          "found": true
+        },
+        {
+          "quote": "Requests an expiring access token and a refresh token",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/maintaining-oauth-apps/troubleshooting-oauth-app-access-token-request-errors",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "You must verify your email address before you can authorize an OAuth app.",
+          "found": false
+        },
+        {
+          "quote": "The redirect_uri MUST match the registered callback URL for this application.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "organization members and outside collaborators must request approval from an organization owner",
+          "found": true
+        },
+        {
+          "quote": "organization members and outside collaborators must request approval from an organization owner",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/github-marketplace/creating-apps-for-github-marketplace/requirements-for-listing-an-app",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "you must request verification for the app listing.",
+          "found": true
+        },
+        {
+          "quote": "OAuth apps should have a minimum of 200 users.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "The `redirect_uri` parameter is optional.",
+          "found": true
+        },
+        {
+          "quote": "Once the user has authorized, the app will receive an access token",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/rate-limits-for-oauth-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "OAuth apps are subject to a rate limit of 2,000 access token requests per hour.",
+          "found": true
+        }
+      ]
+    }
+  ],
+  "checkedAt": "2026-10-29T07:39:53.588Z"
+}

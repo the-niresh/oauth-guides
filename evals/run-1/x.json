@@ -1,0 +1,347 @@
+{
+  "app": "X",
+  "website": "https://developer.x.com",
+  "developerPortalUrl": "https://console.x.com",
+  "summary": "X OAuth setup is mostly self-serve: sign in to the Developer Console, create an app, enable OAuth 2.0, and register exact-match callback URLs before you connect Composio. The main catch is X’s strict redirect-URI matching, one-time credential display, and credit-based billing for real usage. ([docs.x.com](https://docs.x.com/x-api/getting-started/getting-access))",
+  "difficulty": "medium",
+  "difficultyReason": "It is self-serve, but you still need an approved developer account, a configured app, exact callback URLs, and usually billing setup for production traffic. I could not confirm a separate standard-app review queue or SLA in the docs I checked, so this feels moderate rather than hard. ([docs.x.com](https://docs.x.com/x-api/posts/bookmarks/introduction))",
+  "timeToFirstLogin": {
+    "text": "About 15–30 minutes if your developer account is already approved; this is an estimate, not an official SLA.",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "timeToProduction": {
+    "text": "Same day in the usual case, but I could not confirm an official X review timeline for standard OAuth apps.",
+    "status": "unsure",
+    "sourceUrl": null,
+    "quote": null
+  },
+  "costs": [
+    {
+      "text": "No subscriptions; X uses pay-per-usage pricing.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "No subscriptions—pay only for what you use."
+    },
+    {
+      "text": "Purchase credits upfront in the Developer Console.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "Purchase credits upfront in the Developer Console."
+    },
+    {
+      "text": "Post: Create costs $0.015 per request; Post: Create (with URL) costs $0.200 per request.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "Post: Create  | $0.015 per request"
+    },
+    {
+      "text": "You can earn $20 in free X API credits when you save your first eligible payment card and complete your first credit purchase, plus a match of your first auto-recharge up to $50.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "Earn $20 in free X API credits when you save your first eligible payment card and complete your first credit purchase, and a match of your first auto-recharge up to $50."
+    }
+  ],
+  "requirements": [
+    {
+      "text": "An approved developer account.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/posts/bookmarks/introduction",
+      "quote": "An approved developer account"
+    },
+    {
+      "text": "A Project and App in the Developer Console.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/posts/bookmarks/introduction",
+      "quote": "A Project and App in the Developer Console"
+    },
+    {
+      "text": "OAuth 2.0 enabled in your app’s authentication settings.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "To enable OAuth 2.0 in your App, you must enable it in your App’s authentication settings found in the App settings section of the Developer Console."
+    },
+    {
+      "text": "For new projects, choose OAuth 2.0; it offers fine-grained scopes and is required for X API v2 user-context endpoints.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "Choose OAuth 2.0 for new projects."
+    },
+    {
+      "text": "Callback URLs must be added to the app allowlist and must match exactly, including trailing slashes.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)"
+    },
+    {
+      "text": "Use https in production and http://127.0.0.1 for local development, not localhost.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "For local development, use `http://127.0.0.1` (not `localhost`)."
+    },
+    {
+      "text": "Save credentials immediately because they are only shown once.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/getting-access",
+      "quote": "Credentials are only displayed once."
+    }
+  ],
+  "reviewTriggers": [],
+  "steps": [
+    {
+      "owner": "agent",
+      "title": "Draft the app scope",
+      "detail": "Write the app name, use case, and the minimum scopes you actually need.",
+      "status": "unsure",
+      "sourceUrl": null,
+      "quote": null
+    },
+    {
+      "owner": "you",
+      "title": "Open the Developer Console",
+      "detail": "Go to console.x.com, sign in with the X account that will own the app, accept the Developer Agreement and Policy, and complete the profile.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/getting-access",
+      "quote": "Visit console.x.com and sign in with your X account."
+    },
+    {
+      "owner": "you",
+      "title": "Create the app",
+      "detail": "Click New App, enter the name, description, and use case, then generate credentials.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/getting-access",
+      "quote": "Click 'New App'"
+    },
+    {
+      "owner": "you",
+      "title": "Enable OAuth 2.0 and pick the app type",
+      "detail": "In app authentication settings, enable OAuth 2.0 and choose a confidential client type such as Web App or Automated App/Bot if you need a client secret.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "OAuth 2.0 can be used with the X API v2 only."
+    },
+    {
+      "owner": "you",
+      "title": "Add the Composio redirect URI",
+      "detail": "Paste the redirect URI from the Composio dashboard into X’s callback URLs exactly as shown, then save the app.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)"
+    },
+    {
+      "owner": "you",
+      "title": "Save the credentials in Composio",
+      "detail": "Copy the Client ID and Client Secret into Composio, then test the authorize flow with the scopes you chose.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/getting-access",
+      "quote": "Client ID & Secret  | OAuth 2.0 authentication for user-context requests."
+    },
+    {
+      "owner": "you",
+      "title": "Add billing controls",
+      "detail": "Buy credits in the Developer Console and set a spending limit before production traffic.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "Set a maximum amount you can spend per billing cycle to control costs."
+    }
+  ],
+  "blockers": [
+    {
+      "problem": "Redirect URI mismatch.",
+      "whatToDo": "Register the exact Composio callback URL in X and keep the trailing slash, protocol, and path identical.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "URLs must match exactly (including trailing slashes)"
+    },
+    {
+      "problem": "Local callback rejected.",
+      "whatToDo": "Use http://127.0.0.1 for local testing instead of localhost.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/developer-apps",
+      "quote": "For local development, use `http://127.0.0.1` (not `localhost`)."
+    },
+    {
+      "problem": "Authorization code expires before exchange.",
+      "whatToDo": "Exchange the code immediately after the callback; X says the auth code expires after 30 seconds.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "The auth_code has a time limit of 30 seconds"
+    },
+    {
+      "problem": "Access token expires too soon.",
+      "whatToDo": "Request the offline.access scope so X issues a refresh token.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "quote": "If the scope `offline.access` is applied an OAuth 2.0 refresh token will be issued."
+    },
+    {
+      "problem": "You run out of billing credit.",
+      "whatToDo": "Purchase more credits or lower the spending limit in the Developer Console.",
+      "status": "sourced",
+      "sourceUrl": "https://docs.x.com/x-api/getting-started/pricing",
+      "quote": "Credits are deducted as you make API requests."
+    }
+  ],
+  "agentDrafts": [
+    {
+      "title": "App description",
+      "text": "This app lets users connect their X account with OAuth 2.0 so an AI agent can act on their behalf only for the actions they approve. We never ask for passwords, and we only request the minimum scopes needed."
+    },
+    {
+      "title": "Why request users.read and tweet.read",
+      "text": "We need users.read to identify the connected account and tweet.read if the agent reads X content the user has authorized. We only request read scopes when the product actually needs them."
+    },
+    {
+      "title": "Why request tweet.write",
+      "text": "We need tweet.write only if the user explicitly wants the agent to publish posts, replies, or reposts from their account. If the product does not publish anything, omit this scope."
+    },
+    {
+      "title": "Why request offline.access",
+      "text": "We request offline.access so the user does not need to re-authorize every two hours. Without it, the access token is short-lived and the user may be prompted again."
+    },
+    {
+      "title": "Why request DM scopes",
+      "text": "We need dm.read and dm.write only if the product explicitly supports reading or sending Direct Messages. Otherwise, we leave DMs out to keep consent smaller."
+    }
+  ],
+  "openQuestions": [
+    "I could not confirm any separate scope-specific app review or manual approval process for standard OAuth 2.0 apps in the docs I checked.",
+    "I could not confirm whether your Composio deployment should use Web App or Automated App/Bot; that depends on how your backend is hosted.",
+    "I could not confirm whether you need offline.access for your exact product flow, since that depends on whether you want refresh tokens."
+  ],
+  "slug": "x",
+  "generatedAt": "2026-10-29T07:33:25.861Z",
+  "model": "gpt-5.4-mini",
+  "composio": {
+    "status": "bring_your_own",
+    "slug": "TWITTER",
+    "name": "Twitter",
+    "checkedAt": "2026-10-29T07:31:51.125Z"
+  },
+  "sourceChecks": [
+    {
+      "url": "https://docs.x.com/x-api/getting-started/pricing",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "No subscriptions—pay only for what you use.",
+          "found": true
+        },
+        {
+          "quote": "Purchase credits upfront in the Developer Console.",
+          "found": true
+        },
+        {
+          "quote": "Post: Create  | $0.015 per request",
+          "found": false
+        },
+        {
+          "quote": "Earn $20 in free X API credits when you save your first eligible payment card and complete your first credit purchase, and a match of your first auto-recharge up to $50.",
+          "found": true
+        },
+        {
+          "quote": "Set a maximum amount you can spend per billing cycle to control costs.",
+          "found": true
+        },
+        {
+          "quote": "Credits are deducted as you make API requests.",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/x-api/posts/bookmarks/introduction",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "An approved developer account",
+          "found": true
+        },
+        {
+          "quote": "A Project and App in the Developer Console",
+          "found": true
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "To enable OAuth 2.0 in your App, you must enable it in your App’s authentication settings found in the App settings section of the Developer Console.",
+          "found": true
+        },
+        {
+          "quote": "OAuth 2.0 can be used with the X API v2 only.",
+          "found": true
+        },
+        {
+          "quote": "The auth_code has a time limit of 30 seconds",
+          "found": true
+        },
+        {
+          "quote": "If the scope `offline.access` is applied an OAuth 2.0 refresh token will be issued.",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/fundamentals/developer-apps",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Choose OAuth 2.0 for new projects.",
+          "found": true
+        },
+        {
+          "quote": "URLs must match exactly (including trailing slashes)",
+          "found": true
+        },
+        {
+          "quote": "For local development, use `http://127.0.0.1` (not `localhost`).",
+          "found": false
+        },
+        {
+          "quote": "URLs must match exactly (including trailing slashes)",
+          "found": true
+        },
+        {
+          "quote": "URLs must match exactly (including trailing slashes)",
+          "found": true
+        },
+        {
+          "quote": "For local development, use `http://127.0.0.1` (not `localhost`).",
+          "found": false
+        }
+      ]
+    },
+    {
+      "url": "https://docs.x.com/x-api/getting-started/getting-access",
+      "ok": true,
+      "httpStatus": 200,
+      "quotes": [
+        {
+          "quote": "Credentials are only displayed once.",
+          "found": true
+        },
+        {
+          "quote": "Visit console.x.com and sign in with your X account.",
+          "found": true
+        },
+        {
+          "quote": "Click 'New App'",
+          "found": true
+        },
+        {
+          "quote": "Client ID & Secret  | OAuth 2.0 authentication for user-context requests.",
+          "found": false
+        }
+      ]
+    }
+  ]
+}
