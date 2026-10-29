@@ -11,18 +11,31 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
   const [code, setCode] = useState("");
   const [lines, setLines] = useState<Line[]>([]);
   const [busy, setBusy] = useState(false);
+  // Set when the app already has a live-made guide, so the next click runs a fresh one.
+  const [found, setFound] = useState<string | null>(null);
 
-  async function run(e: React.FormEvent) {
+  async function run(e: React.FormEvent, fresh = false) {
     e.preventDefault();
     if (!app.trim() || busy) return;
+    setFound(null);
     setBusy(true);
     setLines([{ text: `Starting research on ${app.trim()}. This takes one to three minutes.`, kind: "step" }]);
     try {
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ app: app.trim(), code }),
+        body: JSON.stringify({ app: app.trim(), code, fresh }),
       });
+      if (res.headers.get("content-type")?.includes("application/json") && res.ok) {
+        const hit = (await res.json()) as { existing: string; inLibrary: boolean };
+        if (hit.inLibrary) {
+          router.push(`/guides/${hit.existing}`);
+        } else {
+          setFound(hit.existing);
+          setLines([{ text: `There is already a guide for ${app.trim()}, made earlier by the agent. Open it, or make a fresh one.`, kind: "step" }]);
+        }
+        return;
+      }
       if (!res.ok || !res.body) {
         const err = (await res.json().catch(() => ({}))) as { error?: string };
         setLines((l) => [...l, { text: err.error ?? `Request failed (${res.status})`, kind: "error" }]);
@@ -78,6 +91,12 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           {busy ? "Researching..." : "Make a guide"}
         </button>
       </form>
+      {found && (
+        <div className="mt-3 flex flex-wrap gap-2 text-sm">
+          <a href={`/guides/${found}`} className="rounded-md border border-ink px-3 py-1.5 underline-offset-2 hover:underline">Open the saved guide</a>
+          <button onClick={(e) => run(e, true)} className="rounded-md border border-line px-3 py-1.5 hover:border-ink">Make a fresh one (costs a run)</button>
+        </div>
+      )}
       {lines.length > 0 && (
         <ol className="mt-4 max-h-80 space-y-1 overflow-y-auto font-mono text-xs" aria-live="polite">
           {lines.map((l, i) => (

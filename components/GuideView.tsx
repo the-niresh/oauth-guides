@@ -74,7 +74,8 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
         {c.checked} claims have a quote we found on the cited page, {c["source-only"]} cite a page we could not check,
         and {c.unsure} have no source. {v?.tested.length ? `A person tested ${v.tested.length} parts by hand.` : "Nobody has tested this setup by hand yet."}
         {v?.corrections.length ? ` ${v.corrections.length} correction${v.corrections.length > 1 ? "s" : ""} made after checking.` : ""}
-        <span className="text-muted"> Made {g.generatedAt.slice(0, 10)} with {g.model}.</span>
+        <span className="text-muted"> Made {g.generatedAt.slice(0, 10)} with {g.model}
+          {g.usage ? `, using ${g.usage.searchCalls} web searches, ${g.usage.inputTokens.toLocaleString("en")} input and ${g.usage.outputTokens.toLocaleString("en")} output tokens, in ${g.usage.seconds} seconds` : ""}.</span>
       </div>
 
       {g.composio.status !== "not_listed" && (

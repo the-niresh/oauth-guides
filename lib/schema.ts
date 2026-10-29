@@ -72,6 +72,8 @@ export type Guide = GuideDraft & {
   model: string;
   composio: ComposioStatus;
   sourceChecks: SourceCheck[];
+  // Missing on guides made before cost logging was added.
+  usage?: { searchCalls: number; inputTokens: number; cachedInputTokens: number; outputTokens: number; seconds: number };
 };
 
 // Written by a person after a real setup attempt. Shown on top of the agent's guide.

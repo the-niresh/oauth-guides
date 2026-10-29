@@ -68,6 +68,7 @@ function stripCitations<T>(v: T, key = ""): T {
 
 export async function runAgent(app: string, emit: (e: AgentEvent) => void): Promise<Guide> {
   const client = new OpenAI();
+  const started = Date.now();
   emit({ type: "step", text: `Checking Composio's toolkit list for ${app}` });
   const composio = await composioStatus(app);
   emit({
@@ -88,8 +89,10 @@ export async function runAgent(app: string, emit: (e: AgentEvent) => void): Prom
   });
 
   let writing = false;
+  let searchCalls = 0;
   for await (const ev of stream) {
     if (ev.type === "response.output_item.done" && ev.item.type === "web_search_call") {
+      searchCalls++;
       const a = ev.item.action;
       if (a?.type === "search") emit({ type: "step", text: `Searched: ${(a.queries ?? [a.query]).filter(Boolean).join(" | ")}` });
       else if (a?.type === "open_page" && a.url) emit({ type: "step", text: `Read: ${a.url}` });
@@ -99,8 +102,18 @@ export async function runAgent(app: string, emit: (e: AgentEvent) => void): Prom
       emit({ type: "step", text: "Writing the guide" });
     }
   }
-  const parsed = (await stream.finalResponse()).output_parsed;
+  const final = await stream.finalResponse();
+  const parsed = final.output_parsed;
   if (!parsed) throw new Error("The model did not return a guide.");
+  // Web search calls and the page text they pull in are most of the cost of a run.
+  const usage = {
+    searchCalls,
+    inputTokens: final.usage?.input_tokens ?? 0,
+    cachedInputTokens: final.usage?.input_tokens_details?.cached_tokens ?? 0,
+    outputTokens: final.usage?.output_tokens ?? 0,
+    seconds: Math.round((Date.now() - started) / 1000),
+  };
+  emit({ type: "step", text: `Used ${usage.searchCalls} web searches, ${usage.inputTokens.toLocaleString()} input and ${usage.outputTokens.toLocaleString()} output tokens` });
   const draft = stripCitations(parsed);
 
   const cited = new Set(allCited(draft).map((c) => c.sourceUrl).filter(Boolean));
@@ -119,5 +132,6 @@ export async function runAgent(app: string, emit: (e: AgentEvent) => void): Prom
     model: MODEL,
     composio,
     sourceChecks: checks,
+    usage,
   };
 }
