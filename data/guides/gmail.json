@@ -220,6 +220,7 @@
       "url": "https://support.google.com/cloud/answer/13463817?hl=en",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "6 weeks",
@@ -239,6 +240,7 @@
       "url": "https://developers.google.com/workspace/gmail/api/reference/quota",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "no additional cost",
@@ -250,6 +252,7 @@
       "url": "https://developers.google.com/workspace/gmail/api/quickstart/python",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "enable the Gmail API.",
@@ -265,6 +268,7 @@
       "url": "https://support.google.com/cloud/answer/13461325?hl=en",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "The OAuth Consent Screen tells users which app is requesting access to their data",
@@ -292,6 +296,7 @@
       "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/policy-compliance",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "verification of all domains associated",
@@ -303,6 +308,7 @@
       "url": "https://support.google.com/cloud/answer/15549049?hl=en",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "The Privacy Policy must be linked",
@@ -314,6 +320,7 @@
       "url": "https://developers.google.com/identity/protocols/oauth2/web-server",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "must exactly match",
@@ -333,6 +340,7 @@
       "url": "https://support.google.com/cloud/answer/15549945?hl=en",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "limited to up to 100 test users",
@@ -360,6 +368,7 @@
       "url": "https://developers.google.com/workspace/gmail/api/auth/scopes",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Read, compose, and send emails from your Gmail account.",
@@ -375,6 +384,7 @@
       "url": "https://developers.google.com/identity/protocols/oauth2/production-readiness/restricted-scope-verification",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "annual security assessment",

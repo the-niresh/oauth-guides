@@ -223,6 +223,7 @@
       "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-review-guide/",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Feedback from this part of the review generally takes up to 10 weeks for new submissions",
@@ -246,6 +247,7 @@
       "url": "https://slack.com/terms-of-service/slack-developer-program",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "We currently provide the Developer Services at no charge.",
@@ -257,6 +259,7 @@
       "url": "https://api.slack.com/authentication/quickstart",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Discontinuing new classic Slack app creation",
@@ -268,6 +271,7 @@
       "url": "https://api.slack.com/authentication/postman",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Choose From Scratch and give your app a name and workspace to live on.",
@@ -283,6 +287,7 @@
       "url": "https://api.slack.com/authentication/oauth-v2",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "The `scope` list requests scopes for your app's bot user.",
@@ -310,6 +315,7 @@
       "url": "https://docs.slack.dev/slack-marketplace/slack-marketplace-app-guidelines-and-requirements/",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "`*:history`",
@@ -337,6 +343,7 @@
       "url": "https://api.slack.com/authentication/sign-in-with-slack",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "select the Development Workspace where you'll play around and build your app.",
@@ -348,6 +355,7 @@
       "url": "https://api.slack.com/docs/apps/ai",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "add the `assistant_thread_started` event",
@@ -359,6 +367,7 @@
       "url": "https://docs.slack.dev/app-management/distribution/",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "click Install App to Workspace",
@@ -374,6 +383,7 @@
       "url": "https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "will be limited to 1 request per minute, unless they are approved for the Slack Marketplace",

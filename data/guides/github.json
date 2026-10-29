@@ -177,6 +177,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "You can create and register an OAuth app under your personal account or under any organization you have administrative access to.",
@@ -196,6 +197,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/differences-between-github-apps-and-oauth-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "OAuth apps need to request the repo scope",
@@ -215,6 +217,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "add and update GitHub Actions workflow files.",
@@ -230,6 +233,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/maintaining-oauth-apps/troubleshooting-oauth-app-access-token-request-errors",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "You must verify your email address before you can authorize an OAuth app.",
@@ -245,6 +249,7 @@
       "url": "https://docs.github.com/en/organizations/managing-oauth-access-to-your-organizations-data/approving-oauth-apps-for-your-organization",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "organization members and outside collaborators must request approval from an organization owner",
@@ -260,6 +265,7 @@
       "url": "https://docs.github.com/en/apps/github-marketplace/creating-apps-for-github-marketplace/requirements-for-listing-an-app",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "you must request verification for the app listing.",
@@ -275,6 +281,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "The `redirect_uri` parameter is optional.",
@@ -290,6 +297,7 @@
       "url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/rate-limits-for-oauth-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "OAuth apps are subject to a rate limit of 2,000 access token requests per hour.",

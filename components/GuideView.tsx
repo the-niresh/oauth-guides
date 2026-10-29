@@ -71,6 +71,8 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
 
       <div className="mt-4 rounded-lg border border-line bg-card p-4 text-sm">
         <span className="font-medium">How sure is this guide? </span>
+        {g.sourceChecks.some((s) => s.ok && s.readable === false) &&
+          "Some cited pages only show text with JavaScript, so their quotes could not be checked by code. "}
         {c.checked} claims have a quote we found on the cited page, {c["source-only"]} cite a page we could not check,
         and {c.unsure} have no source. {v?.tested.length ? `A person tested ${v.tested.length} parts by hand.` : "Nobody has tested this setup by hand yet."}
         {v?.corrections.length ? ` ${v.corrections.length} correction${v.corrections.length > 1 ? "s" : ""} made after checking.` : ""}
@@ -187,7 +189,9 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
         <ul className="space-y-1 text-sm">
           {g.sourceChecks.map((s) => (
             <li key={s.url} className="flex gap-2">
-              <span className={`font-mono text-xs ${s.ok ? "text-checked" : "text-[var(--hard)]"}`}>{s.ok ? "loaded" : `failed${s.httpStatus ? ` ${s.httpStatus}` : ""}`}</span>
+              <span className={`shrink-0 font-mono text-xs ${!s.ok ? "text-[var(--hard)]" : s.readable === false ? "text-source" : "text-checked"}`}>
+                {!s.ok ? `failed${s.httpStatus ? ` ${s.httpStatus}` : ""}` : s.readable === false ? "needs JavaScript, quotes not checkable" : "loaded"}
+              </span>
               <a href={s.url} target="_blank" rel="noreferrer" className="break-all underline">{s.url}</a>
             </li>
           ))}

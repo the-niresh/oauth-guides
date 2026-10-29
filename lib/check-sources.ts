@@ -2,6 +2,9 @@ import type { GuideDraft, SourceCheck } from "./schema";
 import { allCited } from "./evidence";
 
 // Quotes come back with markdown marks (`code`, **bold**) that the page text does not have.
+// A page with less text than this after stripping tags only renders with JavaScript.
+const MIN_TEXT = 500;
+
 // Dashes of every width count as one plain hyphen on both sides.
 const squash = (s: string) =>
   s.toLowerCase().replace(/[`*]/g, "").replace(/[\u2010-\u2015]/g, "-").replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
@@ -46,7 +49,7 @@ export async function checkSources(g: GuideDraft): Promise<{ guide: GuideDraft; 
       // A trailing full stop is often added by the model, so it is ignored.
       found: p.ok && p.text.includes(squash(c.quote!).replace(/[.;:,]+$/, "").slice(0, 80)),
     }));
-    return { url, ok: p.ok, httpStatus: p.status, quotes };
+    return { url, ok: p.ok, httpStatus: p.status, readable: p.text.length > MIN_TEXT, quotes };
   });
 
   for (const c of cited) {

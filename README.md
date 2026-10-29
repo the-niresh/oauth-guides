@@ -11,7 +11,7 @@ hard part is not the form. It is not knowing what is coming: a review that takes
 This app gives a guide per provider and lets you request a guide for any app, researched live by
 an agent. Every claim shows how sure it is.
 
-- Live: <LIVE_URL>
+- Live: https://oauth-guides-zeta.vercel.app (guides are open; making a new one needs the access code sent with this submission)
 - Check notes: [CHECKS.md](CHECKS.md)
 
 ## What a guide answers

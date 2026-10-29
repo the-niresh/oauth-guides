@@ -62,6 +62,8 @@ export type SourceCheck = {
   url: string;
   ok: boolean;
   httpStatus: number | null;
+  // False when the page loaded but has almost no text without JavaScript, so quotes cannot be checked.
+  readable?: boolean;
   // Quotes from this page, and whether each one was found in the page text.
   quotes: { quote: string; found: boolean }[];
 };

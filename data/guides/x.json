@@ -194,6 +194,7 @@
       "url": "https://developer.x.com/?lang=en",
       "ok": true,
       "httpStatus": 200,
+      "readable": false,
       "quotes": [
         {
           "quote": "No fixed monthly costs — pay only for what you use.",
@@ -209,6 +210,7 @@
       "url": "https://docs.x.com/x-api/lists/manage-lists/quickstart",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "A developer account with an approved App",
@@ -220,6 +222,7 @@
       "url": "https://docs.x.com/fundamentals/authentication/oauth-2-0/authorization-code",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "To enable OAuth 2.0 in your App, you must enable it in your App’s authentication settings found in the App settings section of the Developer Console.",
@@ -247,6 +250,7 @@
       "url": "https://docs.x.com/fundamentals/developer-apps",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "URLs must match exactly (including trailing slashes).",
@@ -278,6 +282,7 @@
       "url": "https://help.x.com/en/rules-and-policies/x-automation?lang=browser",
       "ok": false,
       "httpStatus": 403,
+      "readable": false,
       "quotes": [
         {
           "quote": "the deployment or operation of any AI reply bot requires prior written and explicit approval from X.",
@@ -301,6 +306,7 @@
       "url": "https://docs.x.com/fundamentals/authentication/oauth-2-0/user-access-token",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "You will need to pass in the `Content-Type` of `application/x-www-form-urlencoded` via a header. Additionally, you should have in your request: `code`, `grant_type`, `client_id` and `redirect_uri`, and the `code_verifier`.",

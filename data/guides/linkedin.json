@@ -229,6 +229,7 @@
       "url": "https://www.linkedin.com/help/linkedin/answer/a1667239",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "In the Privacy policy URL box, enter your privacy policy URL.",
@@ -252,6 +253,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "This value must match one of the Redirect URLs defined in your application configuration.",
@@ -283,6 +285,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "We are also introducing new scopes `profile` and `email`.",
@@ -302,6 +305,7 @@
       "url": "https://learn.microsoft.com/it-it/linkedin/consumer/integrations/self-serve/share-on-linkedin?context=linkedin/consumer/context",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "make sure to request the `w_member_social` scope!",
@@ -317,6 +321,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Developers seeking to build a marketing related integration using Advertising API permissions must be approved.",
@@ -344,6 +349,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/shared/integrations/people/profile-edit-api",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "The use of this API is restricted to those developers approved by LinkedIn.",
@@ -359,6 +365,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/marketing/community-management-app-review?view=li-lms-2026-01",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "To access the Community Management APIs, every developer must complete an access request form(s)",
@@ -370,6 +377,7 @@
       "url": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/programmatic-refresh-tokens",
       "ok": true,
       "httpStatus": 200,
+      "readable": true,
       "quotes": [
         {
           "quote": "Programmatic refresh tokens are available for a limited set of partners.",
