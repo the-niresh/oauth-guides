@@ -12,6 +12,7 @@ This app gives a guide per provider and lets you request a guide for any app, re
 an agent. Every claim shows how sure it is.
 
 - Live: https://oauth-guides-zeta.vercel.app (guides are open; making a new one needs the access code sent with this submission)
+- The product case (problem, scope, what checking caught, metrics, where it fits in Composio): https://oauth-guides-zeta.vercel.app/about
 - Check notes: [CHECKS.md](CHECKS.md)
 
 ## What a guide answers

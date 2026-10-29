@@ -306,5 +306,10 @@
       ]
     }
   ],
-  "checkedAt": "2026-10-29T07:39:53.588Z"
+  "checkedAt": "2026-10-29T07:39:53.588Z",
+  "timeline": {
+    "setupMinutes": 30,
+    "waitDays": 0,
+    "optionalPath": null
+  }
 }

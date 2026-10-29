@@ -1,105 +1,130 @@
 import Link from "next/link";
 import { generatedGuides, getVerification, libraryGuides } from "@/lib/store";
 import { composioCounts } from "@/lib/composio";
-import { counts } from "@/lib/evidence";
+import { libraryStats } from "@/lib/stats";
 import type { Guide } from "@/lib/schema";
 import { Generate } from "@/components/Generate";
+import { TimeChart } from "@/components/TimeChart";
 import { ComposioPill, Difficulty } from "@/components/badges";
 
 export const dynamic = "force-dynamic";
 
-const ORDER = { easy: 0, medium: 1, hard: 2, blocked: 3 };
+const endMinutes = (g: Guide) => (g.timeline?.setupMinutes ?? 0) + (g.timeline?.waitDays ?? 9999) * 1440;
 
-async function Row({ g }: { g: Guide }) {
-  const c = counts(g);
-  const v = await getVerification(g.slug);
+function Stat({ value, label, note }: { value: string; label: string; note?: string }) {
   return (
-    <tr className="border-t border-line align-top">
-      <td className="py-3 pr-3">
-        <Link href={`/guides/${g.slug}`} className="font-medium underline">{g.app}</Link>
-        <div className="mt-1"><ComposioPill status={g.composio.status} slug={null} /></div>
-      </td>
-      <td className="py-3 pr-3"><Difficulty value={g.difficulty} /></td>
-      <td className="py-3 pr-3 text-sm">{g.timeToFirstLogin.text}</td>
-      <td className="py-3 pr-3 text-sm">{g.timeToProduction.text}</td>
-      <td className="py-3 font-mono text-xs whitespace-nowrap">
-        <span className="text-checked">{c.checked} checked</span><br />
-        <span className="text-source">{c["source-only"]} source only</span><br />
-        <span className="text-unsure">{c.unsure} unsure</span>
-        {v && v.tested.length > 0 && <><br /><span className="text-tested">{v.tested.length} tested</span></>}
-        {v && v.corrections.length > 0 && <><br /><span className="text-ink">{v.corrections.length} corrected</span></>}
-      </td>
-    </tr>
-  );
-}
-
-function Table({ guides }: { guides: Guide[] }) {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[640px] text-left">
-        <thead className="font-mono text-xs uppercase tracking-wide text-muted">
-          <tr>{["App", "Difficulty", "First test login", "Any user can connect", "Evidence"].map((h) => <th key={h} className="pr-3 pb-2 align-bottom">{h}</th>)}</tr>
-        </thead>
-        <tbody>{guides.map((g) => <Row key={g.slug} g={g} />)}</tbody>
-      </table>
+    <div>
+      <div className="font-serif text-4xl leading-none">{value}</div>
+      <div className="mt-2 text-sm">{label}</div>
+      {note && <div className="mt-0.5 font-mono text-[11px] text-muted">{note}</div>}
     </div>
   );
 }
 
 export default async function Home() {
   const [lib, gen, cc] = await Promise.all([libraryGuides(), generatedGuides(), composioCounts().catch(() => null)]);
-  lib.sort((a, b) => ORDER[a.difficulty] - ORDER[b.difficulty]);
+  lib.sort((a, b) => endMinutes(a) - endMinutes(b));
   const live = gen.filter((g) => !lib.some((l) => l.slug === g.slug)).sort((a, b) => b.generatedAt.localeCompare(a.generatedAt));
-  const all = [...lib, ...live].map(counts);
-  const sum = (k: "checked" | "source-only" | "unsure") => all.reduce((n, c) => n + c[k], 0);
+  const stats = libraryStats(lib, live, await Promise.all(lib.map((g) => getVerification(g.slug))));
+  const total = cc ? cc.managed + cc.bringYourOwn : 0;
 
   return (
     <>
-      <section className="max-w-3xl">
-        <h1 className="font-serif text-5xl leading-tight">Will my OAuth app take an hour, or six weeks?</h1>
-        <p className="mt-4 text-lg">
-          Before your users can connect an app to your agent, you may need your own OAuth app with that provider, and
-          sometimes their approval. Look an app up to see how hard it is, how long it takes, what can block you, and
-          which parts an agent can do for you. Every claim shows its evidence.
-        </p>
-        {cc && (
-          <p className="mt-3 text-sm text-muted">
-            Composio lists {cc.managed + cc.bringYourOwn} OAuth toolkits. {cc.bringYourOwn} of them have no managed app,
-            so every developer has to make their own.
-          </p>
-        )}
-      </section>
-
-      <section className="mt-8">
-        <h2 className="mb-3 font-mono text-xs uppercase tracking-wide text-muted">Any app, researched live by an agent</h2>
-        <Generate needsCode={Boolean(process.env.ACCESS_CODE)} />
-      </section>
-
-      <section className="mt-12">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="font-serif text-3xl">Library</h2>
-          <p className="font-mono text-xs text-muted">
-            {lib.length} checked guides · {live.length} made live · claims: {sum("checked")} quote checked, {sum("source-only")} source only, {sum("unsure")} unsure
+      <section className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-end">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">For developers whose agents connect to their users&apos; apps</p>
+          <h1 className="mt-4 font-serif text-5xl leading-[1.02] sm:text-7xl">Will my OAuth app take an hour, or six&nbsp;weeks?</h1>
+          <p className="mt-5 max-w-xl text-lg">
+            Before your users can connect an app to your agent, you may need your own OAuth app with that provider,
+            and their approval. Each guide tells you how hard it is, how long, what can block you, and which steps
+            an agent already did for you. Every claim shows its evidence.
           </p>
         </div>
-        <p className="mt-1 text-sm text-muted">Library guides were made by the agent, then read and corrected by a person.</p>
-        <div className="mt-4"><Table guides={lib} /></div>
+        <div>
+          <h2 className="mb-2 font-mono text-xs uppercase tracking-wide text-muted">Any app, researched live by an agent</h2>
+          <Generate needsCode={Boolean(process.env.ACCESS_CODE)} />
+        </div>
       </section>
 
-      {live.length > 0 && (
-        <section className="mt-12">
-          <h2 className="font-serif text-3xl">Made live</h2>
-          <p className="mt-1 text-sm text-muted">Made by the agent on request. No person has reviewed these.</p>
-          <div className="mt-4"><Table guides={live} /></div>
+      {cc && (
+        <section className="mt-16 grid gap-6 border-y border-line py-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] md:items-center">
+          <p className="text-lg">
+            Composio lists <strong>{total} OAuth toolkits</strong>. For <strong>{cc.bringYourOwn}</strong> of them there is no
+            managed app, so every developer has to make their own. For the rest, the managed app gets you through
+            testing, but production usually needs your own: your name on the consent screen, your own rate limit,
+            more scopes.
+          </p>
+          <div>
+            <div className="flex h-9 overflow-hidden rounded-md border border-ink/70">
+              <div className="flex items-center bg-card px-3 font-mono text-xs" style={{ width: `${(cc.managed / total) * 100}%` }}>
+                {cc.managed} managed
+              </div>
+              <div className="flex flex-1 items-center bg-ink px-3 font-mono text-xs text-paper">{cc.bringYourOwn} bring your own app</div>
+            </div>
+            <p className="mt-2 font-mono text-[11px] text-muted">Read from Composio&apos;s managed-auth list by code, refreshed every 6 hours.</p>
+          </div>
         </section>
       )}
 
-      <section className="mt-12 rounded-lg border border-line p-4 text-sm text-muted">
-        <span className="font-medium text-ink">How to read the evidence. </span>
-        <span className="text-checked">Quote checked</span>: our code opened the cited page and found the quoted words.{" "}
-        <span className="text-source">Source only</span>: a page is cited, but the quote was not found on it (some pages load with JavaScript). Open the link.{" "}
-        <span className="text-unsure">Unsure</span>: no source, often a time estimate.{" "}
-        <span className="text-tested">Tested</span>: a person did this setup and wrote down what happened.
+      <section className="mt-16">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="font-serif text-4xl">An hour, or six weeks</h2>
+            <p className="mt-1 max-w-2xl text-muted">
+              Setup takes under an hour almost everywhere. The difference is the wait before real users can connect.
+              Five apps, chosen because each one is hard in a different way.
+            </p>
+          </div>
+          <Link href="/about#scope" className="font-mono text-xs underline">why these five</Link>
+        </div>
+        <div className="mt-6 rounded-xl border border-line bg-card p-4 sm:p-6">
+          <TimeChart guides={lib} />
+        </div>
+      </section>
+
+      <section className="mt-16 grid gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
+        <div>
+          <h2 className="font-serif text-3xl">How sure is the library?</h2>
+          <p className="mt-2 text-muted">
+            The agent researches. Code checks every quote against the page it cites. A person corrects what is
+            still wrong. These numbers come straight from the guide files.
+          </p>
+          <Link href="/about#quality" className="mt-3 inline-block font-mono text-xs underline">what the checks caught</Link>
+        </div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
+          <Stat value={`${stats.checkedShare}%`} label="claims quote checked" note={`${stats.checked} of ${stats.claims}`} />
+          <Stat value={String(stats.corrections)} label="corrections by a person" note="shown on each guide" />
+          <Stat value={String(stats.library)} label="checked guides" note={`plus ${stats.live} made live`} />
+          <Stat value={String(stats.unsure)} label="claims marked unsure" note="said, not guessed" />
+          <Stat value={stats.avgSeconds ? `${stats.avgSeconds}s` : "-"} label="for a live guide" note={stats.measuredRuns ? `average of ${stats.measuredRuns} measured runs` : "not measured yet"} />
+          <Stat value={stats.avgSearches !== null ? String(stats.avgSearches) : "-"} label="web searches per guide" note="most of the cost of a run" />
+        </div>
+      </section>
+
+      {live.length > 0 && (
+        <section className="mt-16">
+          <h2 className="font-serif text-3xl">Made live by the agent</h2>
+          <p className="mt-1 text-sm text-muted">Requested on this site. Checked by code, not yet read by a person.</p>
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {live.map((g) => (
+              <li key={g.slug}>
+                <Link href={`/guides/${g.slug}`} className="flex items-center gap-2 rounded-full border border-line bg-card py-1.5 pr-3 pl-1.5 no-underline transition hover:border-ink">
+                  <Difficulty value={g.difficulty} />
+                  <span className="text-sm">{g.app}</span>
+                  <ComposioPill status={g.composio.status} slug={null} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section className="mt-20 rounded-xl bg-ink p-6 text-paper sm:p-10">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] opacity-70">The product case</p>
+        <h2 className="mt-3 max-w-2xl font-serif text-4xl">How I built this: the problem, the scope I chose, and what checking taught me</h2>
+        <Link href="/about" className="mt-6 inline-block rounded-md bg-paper px-4 py-2 text-ink no-underline transition hover:opacity-90">
+          Read the case
+        </Link>
       </section>
     </>
   );

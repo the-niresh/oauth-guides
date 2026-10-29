@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Guide, Verification, FactT } from "@/lib/schema";
 import { counts, level, type Cited } from "@/lib/evidence";
 import { ComposioPill, Difficulty, EvidenceBadge, TestedBadge } from "./badges";
@@ -45,40 +46,67 @@ export function GuideView({ g, v, inLibrary }: { g: Guide; v: Verification | nul
   const c = counts(g);
   return (
     <article>
-      <div className="flex flex-wrap items-center gap-2">
-        <Difficulty value={g.difficulty} />
-        <ComposioPill status={g.composio.status} slug={g.composio.slug} />
-        {inLibrary ? (
-          <span className="font-mono text-xs text-muted">library guide</span>
-        ) : (
-          <span className="font-mono text-xs text-source">made live by the agent, not reviewed by a person</span>
-        )}
-      </div>
-      <h1 className="mt-3 font-serif text-5xl">{g.app}</h1>
-      <p className="mt-3 max-w-3xl text-lg">{g.summary}</p>
-      <p className="mt-2 max-w-3xl text-sm text-muted">Why {g.difficulty}: {g.difficultyReason}</p>
-
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        {[["Time to first test login", g.timeToFirstLogin], ["Time until any user can connect", g.timeToProduction]].map(([label, f]) => (
-          <div key={label as string} className="rounded-lg border border-line bg-card p-4">
-            <div className="font-mono text-xs uppercase tracking-wide text-muted">{label as string}</div>
-            <div className="mt-1 text-xl">{(f as FactT).text}</div>
-            <div className="mt-2"><EvidenceBadge level={level(g, f as FactT)} /></div>
-            <Source c={f as FactT} />
+      <Link href="/" className="font-mono text-xs text-muted no-underline hover:text-ink">← All guides</Link>
+      <div className="mt-4 grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+            OAuth app setup · {inLibrary ? "library guide, checked by a person" : <span className="text-source">made live by the agent, not read by a person</span>}
+          </p>
+          <h1 className="mt-3 font-serif text-6xl leading-none">{g.app}</h1>
+          <p className="mt-4 text-lg">{g.summary}</p>
+          <p className="mt-3 text-sm text-muted"><span className="font-medium text-ink">Why {g.difficulty}:</span> {g.difficultyReason}</p>
+          <div className="mt-5 flex flex-wrap gap-2 font-mono text-xs">
+            {(["agent", "you", "wait"] as const).map((o) => {
+              const n = g.steps.filter((s) => s.owner === o).length;
+              return n ? <span key={o} className={`rounded px-2 py-1 ${OWNER[o].cls}`}>{OWNER[o].label}: {n} step{n > 1 ? "s" : ""}</span> : null;
+            })}
           </div>
-        ))}
+        </div>
+
+        <aside className="rounded-xl border border-ink/80 bg-card p-5 shadow-[4px_4px_0_var(--ink)]" aria-label="Verdict">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-xs uppercase tracking-wide text-muted">Verdict</span>
+            <Difficulty value={g.difficulty} />
+          </div>
+          {[["First test login", g.timeToFirstLogin], ["Any user can connect", g.timeToProduction]].map(([label, f]) => (
+            <div key={label as string} className="mt-4 border-t border-line pt-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-[11px] uppercase tracking-wide text-muted">{label as string}</span>
+                <EvidenceBadge level={level(g, f as FactT)} />
+              </div>
+              <div className="mt-1 text-lg leading-snug">{(f as FactT).text}</div>
+            </div>
+          ))}
+          <div className="mt-4 border-t border-line pt-3">
+            <div className="font-mono text-[11px] uppercase tracking-wide text-muted">On Composio</div>
+            <div className="mt-1"><ComposioPill status={g.composio.status} slug={g.composio.slug} /></div>
+          </div>
+          <div className="mt-4 border-t border-line pt-3">
+            <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-wide text-muted">
+              <span>Evidence</span><span>{c.checked + c["source-only"] + c.unsure} claims</span>
+            </div>
+            <div className="mt-2 flex h-2 overflow-hidden rounded-full bg-line">
+              <div className="bg-checked" style={{ flexGrow: c.checked }} />
+              <div className="bg-source" style={{ flexGrow: c["source-only"] }} />
+              <div className="bg-unsure/50" style={{ flexGrow: c.unsure }} />
+            </div>
+            <div className="mt-1.5 flex flex-wrap gap-x-3 font-mono text-[11px]">
+              <span className="text-checked">{c.checked} checked</span>
+              <span className="text-source">{c["source-only"]} source only</span>
+              <span className="text-unsure">{c.unsure} unsure</span>
+              {v?.tested.length ? <span className="text-tested">{v.tested.length} tested</span> : null}
+              {v?.corrections.length ? <span>{v.corrections.length} corrected</span> : null}
+            </div>
+          </div>
+        </aside>
       </div>
 
-      <div className="mt-4 rounded-lg border border-line bg-card p-4 text-sm">
-        <span className="font-medium">How sure is this guide? </span>
-        {g.sourceChecks.some((s) => s.ok && s.readable === false) &&
-          "Some cited pages only show text with JavaScript, so their quotes could not be checked by code. "}
-        {c.checked} claims have a quote we found on the cited page, {c["source-only"]} cite a page we could not check,
-        and {c.unsure} have no source. {v?.tested.length ? `A person tested ${v.tested.length} parts by hand.` : "Nobody has tested this setup by hand yet."}
-        {v?.corrections.length ? ` ${v.corrections.length} correction${v.corrections.length > 1 ? "s" : ""} made after checking.` : ""}
-        <span className="text-muted"> Made {g.generatedAt.slice(0, 10)} with {g.model}
-          {g.usage ? `, using ${g.usage.searchCalls} web searches, ${g.usage.inputTokens.toLocaleString("en")} input and ${g.usage.outputTokens.toLocaleString("en")} output tokens, in ${g.usage.seconds} seconds` : ""}.</span>
-      </div>
+      <p className="mt-6 text-xs text-muted">
+        {g.sourceChecks.some((s) => s.ok && s.readable === false) && "Some cited pages only show text with JavaScript, so their quotes could not be checked by code. "}
+        {v?.tested.length ? "" : "Nobody has done this setup by hand yet. "}
+        Made {g.generatedAt.slice(0, 10)} with {g.model}
+        {g.usage ? `, using ${g.usage.searchCalls} web searches and ${g.usage.inputTokens.toLocaleString("en")} input tokens, in ${g.usage.seconds} seconds` : ""}.
+      </p>
 
       {g.composio.status !== "not_listed" && (
         <div className="mt-4 rounded-lg border border-line p-4 text-sm">

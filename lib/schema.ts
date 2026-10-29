@@ -38,6 +38,12 @@ export const GuideDraft = z.object({
   difficultyReason: z.string(),
   timeToFirstLogin: Fact.describe("Time until a developer can log in a test user, e.g. '15 to 30 minutes'."),
   timeToProduction: Fact.describe("Time until any user can connect, including review or approval waits."),
+  timeline: z.object({
+    setupMinutes: z.number().nullable().describe("Upper estimate of minutes to the first test login."),
+    waitDays: z.number().nullable().describe("Days after setup until any user can connect with the scopes an agent needs. 0 = same day. Null if unknown."),
+    optionalPath: z.object({ label: z.string(), days: z.number() }).nullable()
+      .describe("An optional longer path many developers take, e.g. a marketplace listing. Null if none."),
+  }).describe("The two times as numbers, for the chart. Must agree with timeToFirstLogin and timeToProduction."),
   costs: z.array(Fact).describe("Paid plans, API tiers or fees needed. Empty if none found."),
   requirements: z.array(Fact),
   reviewTriggers: z.array(Fact).describe("Which scopes, features or user counts trigger a review."),

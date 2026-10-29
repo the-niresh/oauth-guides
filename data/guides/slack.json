@@ -392,5 +392,13 @@
       ]
     }
   ],
-  "checkedAt": "2026-10-29T07:39:53.318Z"
+  "checkedAt": "2026-10-29T07:39:53.318Z",
+  "timeline": {
+    "setupMinutes": 30,
+    "waitDays": 0,
+    "optionalPath": {
+      "label": "Marketplace listing",
+      "days": 70
+    }
+  }
 }
