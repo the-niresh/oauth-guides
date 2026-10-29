@@ -80,6 +80,17 @@ library guides additionally get: a person's corrections and hand tests (data/ver
    page and the guide needs a look.
 5. Use every correction to improve the instructions, then rerun, as in run 1 to run 2.
 
+## Cost
+
+Most of the cost of a run is web search: each search is billed, and the page text it pulls in
+counts as model input. Building this library took 11 runs and about 180 searches (9 to 25 a run).
+So:
+
+- Each guide records its own searches, tokens and time, shown at the top of the guide.
+- Asking for an app that already has a guide opens the saved one. A fresh run is a separate,
+  explicit button, and library guides are never replaced by a live run.
+- `ACCESS_CODE` keeps strangers from running the agent on the owner's key.
+
 ## Limits
 
 - The agent reads docs. It does not create OAuth apps itself, since that needs the developer's
