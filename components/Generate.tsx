@@ -80,7 +80,7 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
 
   return (
     <div className="rounded-xl border border-ink/80 bg-card p-5 shadow-[4px_4px_0_var(--ink)]">
-      <form onSubmit={run} className="flex flex-col gap-2 sm:flex-row">
+      <form onSubmit={run} className="flex flex-col gap-3">
         <label className="sr-only" htmlFor="app">App name or website</label>
         <input
           id="app"
@@ -88,21 +88,22 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           onChange={(e) => setApp(e.target.value)}
           placeholder="Any app, e.g. Notion or zoom.us"
           maxLength={100}
-          className="flex-1 rounded-md border border-line bg-paper px-3 py-2 outline-none focus:border-ink"
+          className="w-full rounded-md border border-line bg-paper px-4 py-3 text-lg outline-none focus:border-ink"
         />
+        <div className="flex flex-col gap-3 sm:flex-row">
         {needsCode && (
           <input
             aria-label="Access code"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="Access code"
-            className="rounded-md border border-line bg-paper px-3 py-2 outline-none focus:border-ink sm:w-36"
+            className="min-w-0 flex-1 rounded-md border border-line bg-paper px-4 py-3 outline-none focus:border-ink"
           />
         )}
         <button
           disabled={busy || !app.trim()}
           aria-busy={busy}
-          className={`inline-flex items-center justify-center gap-2 rounded-md bg-ink px-4 py-2 text-paper transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 ${busy ? "cursor-wait" : "disabled:opacity-40"}`}
+          className={`inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-ink px-6 py-3 text-paper ${needsCode ? "" : "sm:flex-1"} transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 ${busy ? "cursor-wait" : "disabled:opacity-40"}`}
         >
           {busy && (
             <svg className="size-4 animate-spin motion-reduce:animate-none" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -112,6 +113,7 @@ export function Generate({ needsCode }: { needsCode: boolean }) {
           )}
           {busy ? "Researching..." : "Make a guide"}
         </button>
+        </div>
       </form>
       {found && (
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
